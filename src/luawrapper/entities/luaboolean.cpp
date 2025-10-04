@@ -7,6 +7,11 @@ namespace LuaWrapper
         value(value)
     {}
 
+    LuaTypeID LuaBoolean::getStaticTypeId()
+    {
+        return LuaTypeID::Boolean;
+    }
+
     void LuaBoolean::pushToLua(lua_State* L) const
     {
         lua_pushboolean(L, value);

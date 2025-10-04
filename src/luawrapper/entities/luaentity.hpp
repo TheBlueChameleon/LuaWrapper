@@ -21,7 +21,8 @@ namespace LuaWrapper
             virtual void fetchFromLua(lua_State* L) = 0;
             virtual void popFromLua(lua_State* L) = 0;
 
-            LuaTypeID getType() const;
+            LuaTypeID getTypeId() const;
+            static LuaTypeID getStaticTypeId();
 
             bool isNil() const;
             bool isBoolean() const;
@@ -34,6 +35,8 @@ namespace LuaWrapper
 
             LuaNil& asLuaNil();
             const LuaNil& asLuaNil() const;
+            LuaBoolean& asLuaBoolean();
+            const LuaBoolean& asLuaBoolean() const;
     };
 }
 

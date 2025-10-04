@@ -6,6 +6,11 @@ namespace LuaWrapper
         LuaEntity(LuaTypeID::Nil)
     {}
 
+    LuaTypeID LuaNil::getStaticTypeId()
+    {
+        return LuaTypeID::Nil;
+    }
+
     void LuaNil::pushToLua(lua_State* L) const
     {
         lua_pushnil(L);

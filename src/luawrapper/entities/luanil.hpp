@@ -15,6 +15,8 @@ namespace LuaWrapper
         public:
             LuaNil();
 
+            static LuaTypeID getStaticTypeId();
+
             bool isNil() const;
 
             nullptr_t get() const;

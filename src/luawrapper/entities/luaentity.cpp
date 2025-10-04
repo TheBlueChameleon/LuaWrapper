@@ -3,6 +3,7 @@ using namespace std::string_literals;
 
 #include "../util/luautil.hpp"
 
+#include "concepts.hpp"
 #include "luaentity.hpp"
 #include "luaentities.hpp"
 
@@ -12,9 +13,14 @@ namespace LuaWrapper
         typeID(typeID)
     {}
 
-    LuaTypeID LuaEntity::getType() const
+    LuaTypeID LuaEntity::getTypeId() const
     {
         return typeID;
+    }
+
+    LuaTypeID LuaEntity::getStaticTypeId()
+    {
+        return LuaTypeID::None;
     }
 
     bool LuaEntity::isNil() const
@@ -57,15 +63,32 @@ namespace LuaWrapper
         return false;
     }
 
-    template<typename T>
+    template<IHasStaticTypeId T>
     T& castOrThrow(LuaEntity* ptr)
     {
         T* cast = dynamic_cast<T*>(ptr);
         if (cast == nullptr)
         {
             throw LuaTypeError(
-                "Could not convert to "s + getTypeName(ptr->getType()) + " "
-                "because entity is a " + getTypeName(ptr->getType())
+                "Could not convert to "s + getTypeName(T::getStaticTypeId()) + " "
+                "because entity is a " + getTypeName(ptr->getTypeId())
+            );
+        }
+        else
+        {
+            return *cast;
+        }
+    }
+
+    template<IHasStaticTypeId T>
+    const T& castOrThrow(const LuaEntity* ptr)
+    {
+        const T* cast = dynamic_cast<const T*>(ptr);
+        if (cast == nullptr)
+        {
+            throw LuaTypeError(
+                "Could not convert to "s + getTypeName(T::getStaticTypeId()) + " "
+                "because entity is a " + getTypeName(ptr->getTypeId())
             );
         }
         else
@@ -76,11 +99,21 @@ namespace LuaWrapper
 
     LuaNil& LuaEntity::asLuaNil()
     {
-        return dynamic_cast<LuaNil&>(*this);
+        return castOrThrow<LuaNil>(this);
     }
 
     const LuaNil& LuaEntity::asLuaNil() const
     {
-        return dynamic_cast<const LuaNil&>(*this);
+        return castOrThrow<const LuaNil>(this);
+    }
+
+    LuaBoolean& LuaEntity::asLuaBoolean()
+    {
+        return castOrThrow<LuaBoolean>(this);
+    }
+
+    const LuaBoolean& LuaEntity::asLuaBoolean() const
+    {
+        return castOrThrow<const LuaBoolean>(this);
     }
 }

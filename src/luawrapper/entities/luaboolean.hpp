@@ -18,6 +18,8 @@ namespace LuaWrapper
         public:
             LuaBoolean(bool value = true);
 
+            static LuaTypeID getStaticTypeId();
+
             bool isBoolean() const;
 
             bool get() const;

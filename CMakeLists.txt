@@ -57,13 +57,12 @@ add_library(LuaWrapper-Lib STATIC
     src/luawrapper/util/luaerror.hpp        src/luawrapper/util/luaerror.cpp
 
     src/luawrapper/entities/luaentities.hpp
+    src/luawrapper/entities/concepts.hpp
     src/luawrapper/entities/luaentity.hpp   src/luawrapper/entities/luaentity.cpp
     src/luawrapper/entities/luanil.hpp      src/luawrapper/entities/luanil.cpp
     src/luawrapper/entities/luaboolean.hpp  src/luawrapper/entities/luaboolean.cpp
 
     src/luawrapper/state/luastate.hpp       src/luawrapper/state/luastate.cpp
-
-    src/luawrapper/foo.cpp
 )
 
 target_link_libraries(LuaWrapper-Lib PUBLIC
@@ -79,7 +78,7 @@ add_executable(LuaWrapper-Test
     src/test/main.cpp
     src/test/typesystemtest.cpp
 
-    src/test/footest.hpp src/test/footest.cpp
+
 )
 
 target_link_libraries(LuaWrapper-Test
