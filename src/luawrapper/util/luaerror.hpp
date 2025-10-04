@@ -1,0 +1,21 @@
+#ifndef LUAERROR_HPP
+#define LUAERROR_HPP
+
+#include <stdexcept>
+
+namespace LuaWrapper
+{
+    class LuaError : public std::runtime_error
+    {
+        public:
+            using std::runtime_error::runtime_error;
+    };
+
+    class LuaTypeError : public LuaError
+    {
+        public:
+            using LuaError::LuaError;
+    };
+}
+
+#endif // LUAERROR_HPP

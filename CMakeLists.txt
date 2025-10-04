@@ -41,6 +41,7 @@ FetchContent_MakeAvailable(googletest)
 
 include_directories(
     src/
+    src/luawrapper/
     "${lua_SOURCE_DIR}/src"
 )
 
@@ -48,8 +49,25 @@ include_directories(
 # lib
 
 add_library(LuaWrapper-Lib STATIC
-    src/luawrapper/luacapi.hpp
+    src/luawrapper/luawrapper.hpp
+
+    src/luawrapper/util/luautil.hpp
+    src/luawrapper/util/luacapi.hpp
+    src/luawrapper/util/luatypes.hpp        src/luawrapper/util/luatypes.cpp
+    src/luawrapper/util/luaerror.hpp        src/luawrapper/util/luaerror.cpp
+
+    src/luawrapper/entities/luaentities.hpp
+    src/luawrapper/entities/luaentity.hpp   src/luawrapper/entities/luaentity.cpp
+    src/luawrapper/entities/luanil.hpp      src/luawrapper/entities/luanil.cpp
+    src/luawrapper/entities/luaboolean.hpp  src/luawrapper/entities/luaboolean.cpp
+
+    src/luawrapper/state/luastate.hpp       src/luawrapper/state/luastate.cpp
+
     src/luawrapper/foo.cpp
+)
+
+target_link_libraries(LuaWrapper-Lib PUBLIC
+    lua::lua
 )
 
 # ............................................................................ #
@@ -59,6 +77,8 @@ include(GoogleTest)
 
 add_executable(LuaWrapper-Test
     src/test/main.cpp
+    src/test/typesystemtest.cpp
+
     src/test/footest.hpp src/test/footest.cpp
 )
 
