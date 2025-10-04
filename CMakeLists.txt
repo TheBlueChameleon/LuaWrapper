@@ -48,6 +48,7 @@ include_directories(
 # lib
 
 add_library(LuaWrapper-Lib STATIC
+    src/luawrapper/luacapi.hpp
     src/luawrapper/foo.cpp
 )
 
@@ -58,6 +59,7 @@ include(GoogleTest)
 
 add_executable(LuaWrapper-Test
     src/test/main.cpp
+    src/test/footest.hpp src/test/footest.cpp
 )
 
 target_link_libraries(LuaWrapper-Test
