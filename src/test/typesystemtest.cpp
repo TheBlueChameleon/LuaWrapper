@@ -25,14 +25,23 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
     // setup
     LuaNil nil;
     LuaBoolean boolean;
+    LuaTrivialType TRUE = true;
 
     // when
     ParameterStack ps;
+    ps
+    .addEntity(nil)
+    .addEntity(std::move(boolean))
+    .addEntity(nullptr)
+    .addEntity(TRUE);
 
     // then
+    EXPECT_EQ(ps.empty(), false);
+    EXPECT_EQ(ps.size(), 4);
     for (const auto& param : ps)
     {
         ASSERT_NE(param->getTypeId(), LuaTypeId::None);
+        std::cout << param->repr() << std::endl;
     }
 }
 
@@ -43,12 +52,12 @@ TEST(TypeSystemTest, ParameterStack_ImplicitConversion)
     // when
     ParameterStack ps = {nullptr, true/*, (void*)foo*/};
 
-    //     ps2.withNil();
-    //     ps2.withBoolean(true);
-
     // then
+    EXPECT_EQ(ps.empty(), false);
+    EXPECT_EQ(ps.size(), 2);
     for (const auto& param : ps)
     {
         ASSERT_NE(param->getTypeId(), LuaTypeId::None);
+        std::cout << param->repr() << std::endl;
     }
 }

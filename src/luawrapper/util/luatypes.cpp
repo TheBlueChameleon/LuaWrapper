@@ -59,9 +59,19 @@ namespace LuaWrapper
         return LuaTypeId(typeId).getTypeName();
     }
 
+    LuaTypeId::operator int() const
+    {
+        return typeId;
+    }
+
     bool LuaTypeId::operator==(const LuaTypeId other) const
     {
         return typeId == other.typeId;
+    }
+
+    bool LuaTypeId::operator==(const int other) const
+    {
+        return typeId == other;
     }
 
     // ====================================================================== //

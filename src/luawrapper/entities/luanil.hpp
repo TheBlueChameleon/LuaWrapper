@@ -20,6 +20,8 @@ namespace LuaWrapper
             bool isNil() const;
 
             nullptr_t getValue() const;
+
+            std::string repr() const;
     };
 }
 

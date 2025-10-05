@@ -1,7 +1,9 @@
-#include <iostream>
+#include <string>
+using namespace std::string_literals;
 
 #include "parameterstack.hpp"
 #include "../entities/entities.hpp"
+#include "../util/luaerror.hpp"
 
 namespace LuaWrapper
 {
@@ -33,6 +35,52 @@ namespace LuaWrapper
         {
             param->pushToLua(L);
         }
+    }
+
+    ParameterStack& ParameterStack::addEntity(const LuaEntity& entity)
+    {
+        entities.push_back(LuaEntityFactory::makeLuaEntity(entity));
+        return *this;
+    }
+
+    ParameterStack& ParameterStack::addEntity(LuaEntity&& entity)
+    {
+        entities.push_back(LuaEntityFactory::makeLuaEntity(std::move(entity)));
+        return *this;
+    }
+
+    ParameterStack& ParameterStack::addEntity(const LuaTrivialType& trivialEntity)
+    {
+        entities.push_back(LuaEntityFactory::makeLuaEntity(trivialEntity));
+        return *this;
+    }
+
+    ParameterStack& ParameterStack::addEntity(LuaTrivialType&& trivialEntity)
+    {
+        entities.push_back(LuaEntityFactory::makeLuaEntity(std::move(trivialEntity)));
+        return *this;
+    }
+
+    size_t ParameterStack::size() const
+    {
+        return entities.size();
+    }
+
+    bool ParameterStack::empty() const
+    {
+        return entities.empty();
+    }
+
+    ParameterStack::value_type ParameterStack::at(size_t index) const
+    {
+        if (index >= size())
+        {
+            throw LuaInvalidArgumentError(
+                "Invalid index '"s + std::to_string(index) + "': "
+                "ParameterStack has only " + std::to_string(size()) + " elements."
+            );
+        }
+        return entities[index];
     }
 
     ParameterStack::iterator ParameterStack::begin()

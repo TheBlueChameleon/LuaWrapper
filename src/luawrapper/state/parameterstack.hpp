@@ -38,8 +38,17 @@ namespace LuaWrapper
 
             void pushToLua(lua_State* L) const;
 
+            ParameterStack& addEntity(const LuaEntity& entity);
+            ParameterStack& addEntity(LuaEntity&& entity);
+            ParameterStack& addEntity(const LuaTrivialType& trivialEntity);
+            ParameterStack& addEntity(LuaTrivialType&& trivialEntity);
+
             // ParameterStack& withNil();
             // ParameterStack& withBoolean(const LuaBoolean& value);
+
+            size_t size() const;
+            bool   empty() const;
+            value_type at(size_t index) const;
 
             iterator        begin();
             const_iterator  begin() const;

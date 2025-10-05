@@ -35,7 +35,9 @@ namespace LuaWrapper
             std::string getTypeName() const;
             static std::string getTypeName(const int typeId);
 
+            operator int() const;
             bool operator==(const LuaTypeId other) const;
+            bool operator==(const int other) const;
     };
 
     // ====================================================================== //

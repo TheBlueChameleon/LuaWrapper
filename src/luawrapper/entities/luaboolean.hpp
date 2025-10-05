@@ -23,9 +23,9 @@ namespace LuaWrapper
 
             bool getValue() const;
             void setValue(const bool newValue);
-    };
 
-    LuaBoolean operator""_LB(unsigned long long int b);
+            std::string repr() const;
+    };
 }
 
 #endif // LUABOOLEAN_HPP

@@ -24,7 +24,12 @@ namespace LuaWrapper
             static LuaEntity* makeLuaEntity(std::string&& value);
             static LuaEntity* makeLuaEntity(const LuaTable& value);
             static LuaEntity* makeLuaEntity(LuaTable&& value);
+
             static LuaEntity* makeLuaEntity(const LuaTrivialType& value);
+            static LuaEntity* makeLuaEntity(LuaTrivialType&& value);
+
+            static LuaEntity* makeLuaEntity(LuaEntity&& value);
+            static LuaEntity* makeLuaEntity(const LuaEntity& value);
     };
 }
 

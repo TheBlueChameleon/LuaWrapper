@@ -43,9 +43,8 @@ namespace LuaWrapper
         value = newValue;
     }
 
-    LuaBoolean operator ""_LB(unsigned long long int b)
+    std::string LuaBoolean::repr() const
     {
-        return LuaBoolean(b);
+        return (value ? "true" : "false");
     }
-
 }

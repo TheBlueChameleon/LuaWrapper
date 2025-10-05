@@ -39,4 +39,9 @@ namespace LuaWrapper
     {
         return nullptr;
     }
+
+    std::string LuaNil::repr() const
+    {
+        return "nil";
+    }
 }

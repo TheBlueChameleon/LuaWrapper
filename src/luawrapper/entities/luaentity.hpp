@@ -1,7 +1,7 @@
 #ifndef LUAENTITY_HPP
 #define LUAENTITY_HPP
 
-#include <variant>
+#include <string>
 
 #include "../util/luacapi.hpp"
 #include "../util/luatypes.hpp"
@@ -41,6 +41,8 @@ namespace LuaWrapper
             const LuaNil& asLuaNil() const;
             LuaBoolean& asLuaBoolean();
             const LuaBoolean& asLuaBoolean() const;
+
+            virtual std::string repr() const = 0;
     };
 }
 
