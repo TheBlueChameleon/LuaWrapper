@@ -22,12 +22,6 @@ namespace LuaWrapper
         value = lua_toboolean(L, -1);
     }
 
-    void LuaBoolean::popFromLua(lua_State* L)
-    {
-        fetchFromLua(L);
-        lua_pop(L, 1);
-    }
-
     bool LuaBoolean::isBoolean() const
     {
         return true;

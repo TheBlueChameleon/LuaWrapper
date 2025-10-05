@@ -23,6 +23,7 @@ TEST(TypeSystemTest, getTypeId)
 TEST(TypeSystemTest, ParameterStack_BuilderInterface)
 {
     // setup
+    const int NAddedItems = 4;
     LuaNil nil;
     LuaBoolean boolean;
     LuaTrivialType TRUE = true;
@@ -36,13 +37,22 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
     .addEntity(TRUE);
 
     // then
-    EXPECT_EQ(ps.empty(), false);
-    EXPECT_EQ(ps.size(), 4);
+    ASSERT_FALSE(ps.empty());
+    EXPECT_EQ(ps.size(), NAddedItems);
     for (const auto& param : ps)
     {
         ASSERT_NE(param->getTypeId(), LuaTypeId::None);
         std::cout << param->repr() << std::endl;
     }
+
+    ASSERT_THROW(ps.at(-1), LuaInvalidArgumentError);
+
+    ASSERT_THROW(ps.at(NAddedItems), LuaInvalidArgumentError);
+
+    ASSERT_NO_THROW(ps.at(NAddedItems - 1));
+
+    ASSERT_NO_THROW(ps.at(0)->getTypeId());
+
 }
 
 void foo() {}
@@ -53,8 +63,7 @@ TEST(TypeSystemTest, ParameterStack_ImplicitConversion)
     ParameterStack ps = {nullptr, true/*, (void*)foo*/};
 
     // then
-    EXPECT_EQ(ps.empty(), false);
-    EXPECT_EQ(ps.size(), 2);
+    ASSERT_EQ(ps.empty(), false);
     for (const auto& param : ps)
     {
         ASSERT_NE(param->getTypeId(), LuaTypeId::None);

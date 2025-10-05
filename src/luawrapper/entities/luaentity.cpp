@@ -16,6 +16,12 @@ namespace LuaWrapper
     LuaEntity::~LuaEntity()
     {}
 
+    void LuaEntity::popFromLua(lua_State* L)
+    {
+        fetchFromLua(L);
+        lua_pop(L, 1);
+    }
+
     LuaTypeId LuaEntity::getTypeId() const
     {
         return typeId;
@@ -118,5 +124,15 @@ namespace LuaWrapper
     const LuaBoolean& LuaEntity::asLuaBoolean() const
     {
         return castOrThrow<const LuaBoolean>(this);
+    }
+
+    LuaLightUserData& LuaEntity::asLuaLightUserData()
+    {
+        return castOrThrow<LuaLightUserData>(this);
+    }
+
+    const LuaLightUserData& LuaEntity::asLuaLightUserData() const
+    {
+        return castOrThrow<const LuaLightUserData>(this);
     }
 }

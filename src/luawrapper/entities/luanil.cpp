@@ -25,11 +25,6 @@ namespace LuaWrapper
         // sic: no-op
     }
 
-    void LuaNil::popFromLua(lua_State* L)
-    {
-        lua_pop(L, 1);
-    }
-
     bool LuaNil::isNil() const
     {
         return true;

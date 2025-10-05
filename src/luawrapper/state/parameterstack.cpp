@@ -102,17 +102,4 @@ namespace LuaWrapper
     {
         return entities.cend();
     }
-
-    // ParameterStack& ParameterStack::withNil()
-    // {
-    //     auto n = LuaNil();
-    //     push_back(n);
-    //     return *this;
-    // }
-
-    // ParameterStack& ParameterStack::withBoolean(const LuaBoolean& value)
-    // {
-    //     push_back(std::ref(value));
-    //     return *this;
-    // }
 }
