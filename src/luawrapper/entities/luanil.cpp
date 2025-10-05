@@ -1,14 +1,18 @@
-#include "luanil.hpp"
+#include "entities.hpp"
 
 namespace LuaWrapper
 {
     LuaNil::LuaNil() :
-        LuaEntity(LuaTypeID::Nil)
+        LuaEntity(LuaTypeId::Nil)
     {}
 
-    LuaTypeID LuaNil::getStaticTypeId()
+    LuaNil::LuaNil(nullptr_t nil) :
+        LuaNil()
+    {}
+
+    LuaTypeId LuaNil::getStaticTypeId()
     {
-        return LuaTypeID::Nil;
+        return LuaTypeId::Nil;
     }
 
     void LuaNil::pushToLua(lua_State* L) const
@@ -31,7 +35,7 @@ namespace LuaWrapper
         return true;
     }
 
-    nullptr_t LuaNil::get() const
+    nullptr_t LuaNil::getValue() const
     {
         return nullptr;
     }

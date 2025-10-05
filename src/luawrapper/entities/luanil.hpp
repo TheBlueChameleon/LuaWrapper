@@ -7,19 +7,19 @@ namespace LuaWrapper
 {
     class LuaNil : public LuaEntity
     {
-        protected:
+        public:
+            LuaNil();
+            LuaNil(nullptr_t nil);
+
+            static LuaTypeId getStaticTypeId();
+
             void pushToLua(lua_State* L) const;
             void fetchFromLua(lua_State* L);
             void popFromLua(lua_State* L);
 
-        public:
-            LuaNil();
-
-            static LuaTypeID getStaticTypeId();
-
             bool isNil() const;
 
-            nullptr_t get() const;
+            nullptr_t getValue() const;
     };
 }
 

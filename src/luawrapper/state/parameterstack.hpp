@@ -1,0 +1,51 @@
+#ifndef PARAMETERSTACK_HPP
+#define PARAMETERSTACK_HPP
+
+#include <deque>
+
+#include "../util/luacapi.hpp"
+#include "../entities/entities.hpp"
+
+namespace LuaWrapper
+{
+    class LuaEntity;
+
+    class ParameterStack
+    {
+        public:
+            using container                 = std::deque<LuaEntity*>;
+
+            using iterator                  = container::iterator;
+            using const_iterator            = container::const_iterator;
+
+            using reverse_iterator          = container::reverse_iterator;
+            using const_reverse_iterator    = container::const_reverse_iterator;
+
+            using difference_type           = container::difference_type;
+            using value_type                = container::value_type;
+            using pointer                   = container::pointer;
+            using reference                 = container::reference;
+            using iterator_category         = std::random_access_iterator_tag;
+
+        private:
+            std::deque<LuaEntity*> entities;
+
+        public:
+            ParameterStack();
+            ParameterStack(const LuaTrivialType& item);
+            ParameterStack(const std::initializer_list<LuaTrivialType>& items);
+            ~ParameterStack();
+
+            void pushToLua(lua_State* L) const;
+
+            // ParameterStack& withNil();
+            // ParameterStack& withBoolean(const LuaBoolean& value);
+
+            iterator        begin();
+            const_iterator  begin() const;
+            iterator        end();
+            const_iterator  end() const;
+    };
+}
+
+#endif // PARAMETERSTACK_HPP

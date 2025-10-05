@@ -7,7 +7,22 @@ using namespace std::string_literals;
 
 namespace LuaWrapper
 {
-    std::string getTypeName(const int typeId)
+    LuaTypeId::LuaTypeId() :
+        typeId(None)
+    {}
+
+    LuaTypeId::LuaTypeId(int typeId) :
+        typeId(typeId)
+    {
+        if ((typeId < None) || (typeId >= NumberOfTypes))
+        {
+            throw LuaInvalidArgumentError(
+                "Unknown TypeId: "s + std::to_string(typeId)
+            );
+        }
+    }
+
+    std::string LuaTypeId::getTypeName() const
     {
         switch (typeId)
         {
@@ -32,20 +47,53 @@ namespace LuaWrapper
             case LUA_TTHREAD:
                 return "Thread";
 
-            // case LUA_NUMTYPES:
-            //     return ???;
-
             default:
-                throw std::invalid_argument(
-                    "Unknown TypeID: "s + std::to_string(typeId)
+                throw LuaInvalidArgumentError(
+                    "Unknown TypeId: "s + std::to_string(typeId)
                 );
         }
     }
 
-    std::string getTypeName(const LuaTypeID typeId)
+    std::string LuaTypeId::getTypeName(const int typeId)
     {
-        return getTypeName(static_cast<int>(typeId));
+        return LuaTypeId(typeId).getTypeName();
     }
+
+    bool LuaTypeId::operator==(const LuaTypeId other) const
+    {
+        return typeId == other.typeId;
+    }
+
+    // ====================================================================== //
+
+    std::string LuaTrivialType::getTrivialTypeName() const
+    {
+        switch (index())
+        {
+            case LuaTrivialType::Nil:
+                return "null pointer";
+            case LuaTrivialType::Boolean:
+                return "boolean";
+            case LuaTrivialType::LightUserData:
+                return "void pointer";
+            case LuaTrivialType::Integer:
+                return "integer";
+            case LuaTrivialType::Double:
+                return "double";
+            case LuaTrivialType::CharPtr:
+                return "char pointer";
+            case LuaTrivialType::String:
+                return "string";
+
+            default:
+                throw LuaTypeError(
+                    "Unknown Trivial Type ID: "s + std::to_string(index())
+                );
+        }
+    }
+
+
+
 }
 
 

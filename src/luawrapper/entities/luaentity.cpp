@@ -5,22 +5,25 @@ using namespace std::string_literals;
 
 #include "concepts.hpp"
 #include "luaentity.hpp"
-#include "luaentities.hpp"
+#include "entities.hpp"
 
 namespace LuaWrapper
 {
-    LuaEntity::LuaEntity(const LuaTypeID typeID) :
-        typeID(typeID)
+    LuaEntity::LuaEntity(const LuaTypeId typeID) :
+        typeId(typeID)
     {}
 
-    LuaTypeID LuaEntity::getTypeId() const
+    LuaEntity::~LuaEntity()
+    {}
+
+    LuaTypeId LuaEntity::getTypeId() const
     {
-        return typeID;
+        return typeId;
     }
 
-    LuaTypeID LuaEntity::getStaticTypeId()
+    LuaTypeId LuaEntity::getStaticTypeId()
     {
-        return LuaTypeID::None;
+        return LuaTypeId::None;
     }
 
     bool LuaEntity::isNil() const
@@ -70,8 +73,8 @@ namespace LuaWrapper
         if (cast == nullptr)
         {
             throw LuaTypeError(
-                "Could not convert to "s + getTypeName(T::getStaticTypeId()) + " "
-                "because entity is a " + getTypeName(ptr->getTypeId())
+                "Could not convert to "s + T::getStaticTypeId().getTypeName() + " "
+                "because entity is a " + ptr->getTypeId().getTypeName()
             );
         }
         else
@@ -87,8 +90,8 @@ namespace LuaWrapper
         if (cast == nullptr)
         {
             throw LuaTypeError(
-                "Could not convert to "s + getTypeName(T::getStaticTypeId()) + " "
-                "because entity is a " + getTypeName(ptr->getTypeId())
+                "Could not convert to "s + T::getStaticTypeId().getTypeName() + " "
+                "because entity is a " + ptr->getTypeId().getTypeName()
             );
         }
         else

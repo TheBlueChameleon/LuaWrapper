@@ -1,0 +1,9 @@
+#ifndef ENTITIES_H
+#define ENTITIES_H
+
+#include "luaentity.hpp"
+#include "luanil.hpp"
+#include "luaboolean.hpp"
+#include "luaentityfactory.hpp"
+
+#endif // ENTITIES_H

@@ -3,9 +3,9 @@
 
 #include <filesystem>
 #include <list>
-#include <unordered_set>
+#include <unordered_map>
 
-#include "../util/luacapi.hpp"
+#include "../util/luautil.hpp"
 
 namespace LuaWrapper
 {
@@ -16,14 +16,15 @@ namespace LuaWrapper
     {
         private:
             lua_State* L = nullptr;
-            std::unordered_set<std::string> luaFunctionNames;
-            // --> luaGlobals as named tuple <name, type>
+            std::unordered_map<std::string, LuaTypeId> globalSymbols;
 
         public:
             LuaState(const std::filesystem::path& scriptFile);
             ~LuaState();
 
-            const std::unordered_set<std::string>& getLuaFunctionNames() const;
+            std::unordered_map<std::string, LuaTypeId> getGlobalSymbols() const;
+
+            lua_State* expose() const;
     };
 }
 

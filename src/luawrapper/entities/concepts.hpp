@@ -11,7 +11,7 @@ namespace LuaWrapper
         {
             T::getStaticTypeId()
         }
-        -> std::convertible_to<LuaTypeID>;
+        -> std::convertible_to<LuaTypeId>;
     };
 }
 

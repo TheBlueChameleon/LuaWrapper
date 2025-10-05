@@ -16,6 +16,18 @@ namespace LuaWrapper
         public:
             using LuaError::LuaError;
     };
+
+    class LuaInvalidArgumentError : public LuaError
+    {
+        public:
+            using LuaError::LuaError;
+    };
+
+    class LuaNotImplementedError : public LuaError
+    {
+        public:
+            using LuaError::LuaError;
+    };
 }
 
 #endif // LUAERROR_HPP

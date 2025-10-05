@@ -3,13 +3,13 @@
 namespace LuaWrapper
 {
     LuaBoolean::LuaBoolean(bool value) :
-        LuaEntity(LuaTypeID::Boolean),
+        LuaEntity(LuaTypeId::Boolean),
         value(value)
     {}
 
-    LuaTypeID LuaBoolean::getStaticTypeId()
+    LuaTypeId LuaBoolean::getStaticTypeId()
     {
-        return LuaTypeID::Boolean;
+        return LuaTypeId::Boolean;
     }
 
     void LuaBoolean::pushToLua(lua_State* L) const
@@ -33,13 +33,19 @@ namespace LuaWrapper
         return true;
     }
 
-    bool LuaBoolean::get() const
+    bool LuaBoolean::getValue() const
     {
         return value;
     }
 
-    void LuaBoolean::set(const bool newValue)
+    void LuaBoolean::setValue(const bool newValue)
     {
         value = newValue;
     }
+
+    LuaBoolean operator ""_LB(unsigned long long int b)
+    {
+        return LuaBoolean(b);
+    }
+
 }

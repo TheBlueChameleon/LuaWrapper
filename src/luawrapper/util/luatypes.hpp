@@ -2,30 +2,59 @@
 #define LUATYPES_H
 
 #include <string>
+#include <variant>
 
 #include "luacapi.hpp"
 
 namespace LuaWrapper
 {
-    enum class LuaTypeID
+    class LuaTypeId
     {
-        None = LUA_TNONE,
+        public:
+            static constexpr auto None = LUA_TNONE;
 
-        Nil = LUA_TNIL,
-        Boolean = LUA_TBOOLEAN,
-        LightUserData = LUA_TLIGHTUSERDATA,
-        Number = LUA_TNUMBER,
-        String = LUA_TSTRING,
-        Table = LUA_TTABLE,
-        Function= LUA_TFUNCTION,
-        UserData = LUA_TUSERDATA,
-        Thread = LUA_TTHREAD,
+            static constexpr auto Nil = LUA_TNIL;
+            static constexpr auto Boolean = LUA_TBOOLEAN;
+            static constexpr auto LightUserData = LUA_TLIGHTUSERDATA;
+            static constexpr auto Number = LUA_TNUMBER;
+            static constexpr auto String = LUA_TSTRING;
+            static constexpr auto Table = LUA_TTABLE;
+            static constexpr auto Function= LUA_TFUNCTION;
+            static constexpr auto UserData = LUA_TUSERDATA;
+            static constexpr auto Thread = LUA_TTHREAD;
 
-        NumberOfTypes = LUA_NUMTYPES,
+            static constexpr auto NumberOfTypes = LUA_NUMTYPES;
+
+        private:
+            int typeId;
+
+        public:
+            LuaTypeId();
+            LuaTypeId(int typeId);
+
+            std::string getTypeName() const;
+            static std::string getTypeName(const int typeId);
+
+            bool operator==(const LuaTypeId other) const;
     };
 
-    std::string getTypeName(const int typeId);
-    std::string getTypeName(const LuaTypeID typeId);
+    // ====================================================================== //
+
+    class LuaTrivialType : public std::variant<nullptr_t, bool, void*, int, double, char*, std::string>
+    {
+        public:
+            using std::variant<nullptr_t, bool, void*, int, double, char*, std::string>::variant;
+
+            static constexpr auto Nil = 0;
+            static constexpr auto Boolean = 1;
+            static constexpr auto LightUserData = 2;
+            static constexpr auto Integer = 3;
+            static constexpr auto Double = 4;
+            static constexpr auto CharPtr = 5;
+            static constexpr auto String = 6;
+
+            std::string getTrivialTypeName() const;
+    };
 }
 
 #endif // LUATYPES_H
