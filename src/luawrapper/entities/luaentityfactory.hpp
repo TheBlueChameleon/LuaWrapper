@@ -15,10 +15,11 @@ namespace LuaWrapper
             LuaEntityFactory();
 
         public:
-            static LuaEntity* makeLuaNil(const nullptr_t value = nullptr);
-            static LuaEntity* makeLuaBoolean(const bool value);
-            static LuaEntity* makeLuaLightUserData(const void* value);
-            static LuaEntity* makeLuaNumber(const double value);
+            static LuaEntity* makeLuaEntity(const nullptr_t value = nullptr);
+            static LuaEntity* makeLuaEntity(const bool value);
+            static LuaEntity* makeLuaEntity(const void* value);
+            static LuaEntity* makeLuaEntity(const int value);
+            static LuaEntity* makeLuaEntity(const double value);
             static LuaEntity* makeLuaEntity(const char* const value);
             static LuaEntity* makeLuaEntity(const std::string& value);
             static LuaEntity* makeLuaEntity(std::string&& value);

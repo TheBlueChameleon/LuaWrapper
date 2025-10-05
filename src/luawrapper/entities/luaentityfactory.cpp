@@ -9,22 +9,27 @@ namespace LuaWrapper
 {
     LuaEntityFactory::LuaEntityFactory() {}
 
-    LuaEntity* LuaEntityFactory::makeLuaNil(const nullptr_t value)
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const nullptr_t value)
     {
         return new LuaNil();
     }
 
-    LuaEntity* LuaEntityFactory::makeLuaBoolean(const bool value)
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const bool value)
     {
         return new LuaBoolean(value);
     }
 
-    LuaEntity* LuaEntityFactory::makeLuaLightUserData(const void* value)
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const void* value)
     {
         return new LuaLightUserData(value);
     }
 
-    LuaEntity* LuaEntityFactory::makeLuaNumber(const double value)
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const int value)
+    {
+        return new LuaNumber(value);
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const double value)
     {
         return new LuaNumber(value);
     }
@@ -34,15 +39,15 @@ namespace LuaWrapper
         switch (value.index())
         {
             case LuaTrivialType::Nil:
-                return LuaEntityFactory::makeLuaNil();
+                return LuaEntityFactory::makeLuaEntity();
             case LuaTrivialType::Boolean:
-                return LuaEntityFactory::makeLuaBoolean(std::get<LuaTrivialType::Boolean>(value));
+                return LuaEntityFactory::makeLuaEntity(value.getAsBoolean());
             case LuaTrivialType::LightUserData:
-                return LuaEntityFactory::makeLuaLightUserData(std::get<LuaTrivialType::LightUserData>(value));
+                return LuaEntityFactory::makeLuaEntity(value.getAsLightUserData());
             case LuaTrivialType::Integer:
-                return LuaEntityFactory::makeLuaNumber(std::get<LuaTrivialType::Integer>(value));
+                return LuaEntityFactory::makeLuaEntity(value.getAsInteger());
             case LuaTrivialType::Double:
-                return LuaEntityFactory::makeLuaNumber(std::get<LuaTrivialType::Double>(value));
+                return LuaEntityFactory::makeLuaEntity(value.getAsDouble());
             case LuaTrivialType::CharPtr:
             case LuaTrivialType::String:
                 throw LuaNotImplementedError(
@@ -61,15 +66,15 @@ namespace LuaWrapper
         switch (value.index())
         {
             case LuaTrivialType::Nil:
-                return LuaEntityFactory::makeLuaNil();
+                return LuaEntityFactory::makeLuaEntity();
             case LuaTrivialType::Boolean:
-                return LuaEntityFactory::makeLuaBoolean(std::get<LuaTrivialType::Boolean>(value));
+                return LuaEntityFactory::makeLuaEntity(value.getAsBoolean());
             case LuaTrivialType::LightUserData:
-                return LuaEntityFactory::makeLuaLightUserData(std::get<LuaTrivialType::LightUserData>(value));
+                return LuaEntityFactory::makeLuaEntity(value.getAsLightUserData());
             case LuaTrivialType::Integer:
-                return LuaEntityFactory::makeLuaNumber(std::get<LuaTrivialType::Integer>(value));
+                return LuaEntityFactory::makeLuaEntity(value.getAsInteger());
             case LuaTrivialType::Double:
-                return LuaEntityFactory::makeLuaNumber(std::get<LuaTrivialType::Double>(value));
+                return LuaEntityFactory::makeLuaEntity(value.getAsDouble());
             case LuaTrivialType::CharPtr:
             case LuaTrivialType::String:
                 throw LuaNotImplementedError(
@@ -93,13 +98,13 @@ namespace LuaWrapper
                 );
 
             case LuaTypeId::Nil:
-                return LuaEntityFactory::makeLuaNil();
+                return LuaEntityFactory::makeLuaEntity();
             case LuaTypeId::Boolean:
-                return LuaEntityFactory::makeLuaBoolean(value.asLuaBoolean().getValue());
+                return LuaEntityFactory::makeLuaEntity(value.asLuaBoolean().getValue());
             case LuaTypeId::LightUserData:
-                return LuaEntityFactory::makeLuaLightUserData(value.asLuaLightUserData().getValue());
+                return LuaEntityFactory::makeLuaEntity(value.asLuaLightUserData().getValue());
             case LuaTypeId::Number:
-                return LuaEntityFactory::makeLuaNumber(value.asLuaNumber().getValue());
+                return LuaEntityFactory::makeLuaEntity(value.asLuaNumber().getValue());
             case LuaTypeId::String:
             case LuaTypeId::Table:
             case LuaTypeId::Function:
@@ -126,13 +131,13 @@ namespace LuaWrapper
                 );
 
             case LuaTypeId::Nil:
-                return LuaEntityFactory::makeLuaNil();
+                return LuaEntityFactory::makeLuaEntity();
             case LuaTypeId::Boolean:
-                return LuaEntityFactory::makeLuaBoolean(value.asLuaBoolean().getValue());
+                return LuaEntityFactory::makeLuaEntity(value.asLuaBoolean().getValue());
             case LuaTypeId::LightUserData:
-                return LuaEntityFactory::makeLuaLightUserData(value.asLuaLightUserData().getValue());
+                return LuaEntityFactory::makeLuaEntity(value.asLuaLightUserData().getValue());
             case LuaTypeId::Number:
-                return LuaEntityFactory::makeLuaNumber(value.asLuaNumber().getValue());
+                return LuaEntityFactory::makeLuaEntity(value.asLuaNumber().getValue());
             case LuaTypeId::String:
             case LuaTypeId::Table:
             case LuaTypeId::Function:

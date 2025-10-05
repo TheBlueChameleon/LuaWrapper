@@ -119,10 +119,40 @@ namespace LuaWrapper
         return nullptr;
     }
 
-    int LuaTrivialType::getAsInt() const
+    bool LuaTrivialType::getAsBoolean() const
+    {
+        assertType(this, LuaTrivialType::Boolean);
+        return std::get<LuaTrivialType::Boolean>(*this);
+    }
+
+    const void* LuaTrivialType::getAsLightUserData() const
+    {
+        assertType(this, LuaTrivialType::LightUserData);
+        return std::get<LuaTrivialType::LightUserData>(*this);
+    }
+
+    int LuaTrivialType::getAsInteger() const
     {
         assertType(this, LuaTrivialType::Integer);
         return std::get<LuaTrivialType::Integer>(*this);
+    }
+
+    double LuaTrivialType::getAsDouble() const
+    {
+        assertType(this, LuaTrivialType::Double);
+        return std::get<LuaTrivialType::Double>(*this);
+    }
+
+    const char* LuaTrivialType::getAsCharPtr() const
+    {
+        assertType(this, LuaTrivialType::CharPtr);
+        return std::get<LuaTrivialType::CharPtr>(*this);
+    }
+
+    const std::string& LuaTrivialType::getAsString() const
+    {
+        assertType(this, LuaTrivialType::String);
+        return std::get<LuaTrivialType::String>(*this);
     }
 
 }

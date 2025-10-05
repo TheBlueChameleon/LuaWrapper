@@ -56,10 +56,15 @@ namespace LuaWrapper
             static constexpr auto CharPtr = 5;
             static constexpr auto String = 6;
 
-            std::string getTrivialTypeName() const;
+            std::string         getTrivialTypeName() const;
 
-            nullptr_t   getAsNil() const;
-            int         getAsInt() const;
+            nullptr_t           getAsNil() const;
+            bool                getAsBoolean() const;
+            const void*         getAsLightUserData() const;
+            int                 getAsInteger() const;
+            double              getAsDouble() const;
+            const char*         getAsCharPtr() const;
+            const std::string&  getAsString() const;
     };
 }
 
