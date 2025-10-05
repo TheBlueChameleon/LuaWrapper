@@ -9,19 +9,24 @@ namespace LuaWrapper
 {
     LuaEntityFactory::LuaEntityFactory() {}
 
-    LuaEntity* LuaEntityFactory::makeLuaEntity(const nullptr_t value)
+    LuaEntity* LuaEntityFactory::makeLuaNil(const nullptr_t value)
     {
         return new LuaNil();
     }
 
-    LuaEntity* LuaEntityFactory::makeLuaEntity(const bool value)
+    LuaEntity* LuaEntityFactory::makeLuaBoolean(const bool value)
     {
         return new LuaBoolean(value);
     }
 
-    LuaEntity* LuaEntityFactory::makeLuaEntity(const void* value)
+    LuaEntity* LuaEntityFactory::makeLuaLightUserData(const void* value)
     {
         return new LuaLightUserData(value);
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaNumber(const double value)
+    {
+        return new LuaNumber(value);
     }
 
     LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaTrivialType& value)
@@ -29,13 +34,15 @@ namespace LuaWrapper
         switch (value.index())
         {
             case LuaTrivialType::Nil:
-                return LuaEntityFactory::makeLuaEntity();
+                return LuaEntityFactory::makeLuaNil();
             case LuaTrivialType::Boolean:
-                return LuaEntityFactory::makeLuaEntity(std::get<LuaTrivialType::Boolean>(value));
+                return LuaEntityFactory::makeLuaBoolean(std::get<LuaTrivialType::Boolean>(value));
             case LuaTrivialType::LightUserData:
-                return LuaEntityFactory::makeLuaEntity(std::get<LuaTrivialType::LightUserData>(value));
+                return LuaEntityFactory::makeLuaLightUserData(std::get<LuaTrivialType::LightUserData>(value));
             case LuaTrivialType::Integer:
+                return LuaEntityFactory::makeLuaNumber(std::get<LuaTrivialType::Integer>(value));
             case LuaTrivialType::Double:
+                return LuaEntityFactory::makeLuaNumber(std::get<LuaTrivialType::Double>(value));
             case LuaTrivialType::CharPtr:
             case LuaTrivialType::String:
                 throw LuaNotImplementedError(
@@ -54,13 +61,15 @@ namespace LuaWrapper
         switch (value.index())
         {
             case LuaTrivialType::Nil:
-                return LuaEntityFactory::makeLuaEntity();
+                return LuaEntityFactory::makeLuaNil();
             case LuaTrivialType::Boolean:
-                return LuaEntityFactory::makeLuaEntity(std::get<LuaTrivialType::Boolean>(value));
+                return LuaEntityFactory::makeLuaBoolean(std::get<LuaTrivialType::Boolean>(value));
             case LuaTrivialType::LightUserData:
-                return LuaEntityFactory::makeLuaEntity(std::get<LuaTrivialType::LightUserData>(value));
+                return LuaEntityFactory::makeLuaLightUserData(std::get<LuaTrivialType::LightUserData>(value));
             case LuaTrivialType::Integer:
+                return LuaEntityFactory::makeLuaNumber(std::get<LuaTrivialType::Integer>(value));
             case LuaTrivialType::Double:
+                return LuaEntityFactory::makeLuaNumber(std::get<LuaTrivialType::Double>(value));
             case LuaTrivialType::CharPtr:
             case LuaTrivialType::String:
                 throw LuaNotImplementedError(
@@ -84,12 +93,13 @@ namespace LuaWrapper
                 );
 
             case LuaTypeId::Nil:
-                return LuaEntityFactory::makeLuaEntity();
+                return LuaEntityFactory::makeLuaNil();
             case LuaTypeId::Boolean:
-                return LuaEntityFactory::makeLuaEntity(value.asLuaBoolean().getValue());
+                return LuaEntityFactory::makeLuaBoolean(value.asLuaBoolean().getValue());
             case LuaTypeId::LightUserData:
-                return LuaEntityFactory::makeLuaEntity(value.asLuaLightUserData().getValue());
+                return LuaEntityFactory::makeLuaLightUserData(value.asLuaLightUserData().getValue());
             case LuaTypeId::Number:
+                return LuaEntityFactory::makeLuaNumber(value.asLuaNumber().getValue());
             case LuaTypeId::String:
             case LuaTypeId::Table:
             case LuaTypeId::Function:
@@ -110,23 +120,31 @@ namespace LuaWrapper
     {
         switch (value.getTypeId())
         {
-            case LuaTrivialType::Nil:
-                return LuaEntityFactory::makeLuaEntity();
-            case LuaTrivialType::Boolean:
-                return LuaEntityFactory::makeLuaEntity(value.asLuaBoolean().getValue());
-            case LuaTrivialType::LightUserData:
-                return LuaEntityFactory::makeLuaEntity(value.asLuaLightUserData().getValue());
-            case LuaTrivialType::Integer:
-            case LuaTrivialType::Double:
-            case LuaTrivialType::CharPtr:
-            case LuaTrivialType::String:
+            case LuaTypeId::None:
+                throw LuaInvalidArgumentError(
+                    "Cannot make Lua entity of type "s + value.getTypeId().getTypeName()
+                );
+
+            case LuaTypeId::Nil:
+                return LuaEntityFactory::makeLuaNil();
+            case LuaTypeId::Boolean:
+                return LuaEntityFactory::makeLuaBoolean(value.asLuaBoolean().getValue());
+            case LuaTypeId::LightUserData:
+                return LuaEntityFactory::makeLuaLightUserData(value.asLuaLightUserData().getValue());
+            case LuaTypeId::Number:
+                return LuaEntityFactory::makeLuaNumber(value.asLuaNumber().getValue());
+            case LuaTypeId::String:
+            case LuaTypeId::Table:
+            case LuaTypeId::Function:
+            case LuaTypeId::UserData:
+            case LuaTypeId::Thread:
                 throw LuaNotImplementedError(
-                    "Not yet implemented: move-constructing Lua Entity from "s + value.getTypeId().getTypeName()
+                    "Not yet implemented: copy-constructing Lua Entity from "s + value.getTypeId().getTypeName()
                 );
 
             default:
-                throw LuaTypeError(
-                    "Unknown Trivial Type ID: "s + std::to_string(value.getTypeId())
+                throw LuaInvalidArgumentError(
+                    "Cannot make Lua entity with type id "s + std::to_string(value.getTypeId())
                 );
         }
     }

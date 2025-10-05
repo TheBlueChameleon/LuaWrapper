@@ -63,6 +63,7 @@ add_library(LuaWrapper-Lib STATIC
     src/luawrapper/entities/luanil.hpp              src/luawrapper/entities/luanil.cpp
     src/luawrapper/entities/luaboolean.hpp          src/luawrapper/entities/luaboolean.cpp
     src/luawrapper/entities/lualightuserdata.hpp    src/luawrapper/entities/lualightuserdata.cpp
+    src/luawrapper/entities/luanumber.hpp           src/luawrapper/entities/luanumber.cpp
 
     src/luawrapper/state/state.hpp
     src/luawrapper/state/luastate.hpp               src/luawrapper/state/luastate.cpp

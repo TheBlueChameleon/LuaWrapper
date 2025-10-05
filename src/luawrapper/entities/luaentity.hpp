@@ -11,6 +11,7 @@ namespace LuaWrapper
     class LuaNil;
     class LuaBoolean;
     class LuaLightUserData;
+    class LuaNumber;
 
     class LuaEntity
     {
@@ -24,7 +25,7 @@ namespace LuaWrapper
 
             virtual void pushToLua(lua_State* L) const = 0;
             virtual void fetchFromLua(lua_State* L) = 0;
-            virtual void popFromLua(lua_State* L);
+            void popFromLua(lua_State* L);
 
             LuaTypeId getTypeId() const;
             static LuaTypeId getStaticTypeId();
@@ -44,8 +45,10 @@ namespace LuaWrapper
             const LuaBoolean& asLuaBoolean() const;
             LuaLightUserData& asLuaLightUserData();
             const LuaLightUserData& asLuaLightUserData() const;
+            LuaNumber& asLuaNumber();
+            const LuaNumber& asLuaNumber() const;
 
-            virtual std::string repr() const = 0;
+            virtual std::string to_string() const = 0;
     };
 }
 

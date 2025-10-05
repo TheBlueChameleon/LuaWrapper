@@ -30,7 +30,7 @@ namespace LuaWrapper
 
         public:
             LuaTypeId();
-            LuaTypeId(int typeId);
+            LuaTypeId(const int typeId);
 
             std::string getTypeName() const;
             static std::string getTypeName(const int typeId);
@@ -42,10 +42,11 @@ namespace LuaWrapper
 
     // ====================================================================== //
 
-    class LuaTrivialType : public std::variant<nullptr_t, bool, void*, int, double, char*, std::string>
+    using LuaTrivialVariant = std::variant<nullptr_t, bool, void*, int, double, char*, std::string>;
+    class LuaTrivialType : public LuaTrivialVariant
     {
         public:
-            using std::variant<nullptr_t, bool, void*, int, double, char*, std::string>::variant;
+            using LuaTrivialVariant::variant;
 
             static constexpr auto Nil = 0;
             static constexpr auto Boolean = 1;
@@ -56,6 +57,9 @@ namespace LuaWrapper
             static constexpr auto String = 6;
 
             std::string getTrivialTypeName() const;
+
+            nullptr_t   getAsNil() const;
+            int         getAsInt() const;
     };
 }
 

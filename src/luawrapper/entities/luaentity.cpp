@@ -135,4 +135,14 @@ namespace LuaWrapper
     {
         return castOrThrow<const LuaLightUserData>(this);
     }
+
+    LuaNumber& LuaEntity::asLuaNumber()
+    {
+        return castOrThrow<LuaNumber>(this);
+    }
+
+    const LuaNumber& LuaEntity::asLuaNumber() const
+    {
+        return castOrThrow<const LuaNumber>(this);
+    }
 }

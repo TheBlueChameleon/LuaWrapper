@@ -9,32 +9,47 @@ using namespace LuaWrapper;
 TEST(TypeSystemTest, getTypeId)
 {
     // setup
-    LuaNil nil;
-    LuaBoolean boolean;
+    LuaNil              nil;
+    LuaBoolean          boolean;
+    LuaLightUserData    lud;
+    LuaNumber           number;
 
     // expect
-    EXPECT_EQ(nil.getTypeId(), LuaTypeId::Nil);
-    EXPECT_EQ(nil.getStaticTypeId(), LuaTypeId::Nil);
+    EXPECT_EQ(nil.getTypeId(),              LuaTypeId::Nil);
+    EXPECT_EQ(nil.getStaticTypeId(),        LuaTypeId::Nil);
 
-    EXPECT_EQ(boolean.getTypeId(), LuaTypeId::Boolean);
-    EXPECT_EQ(boolean.getStaticTypeId(), LuaTypeId::Boolean);
+    EXPECT_EQ(boolean.getTypeId(),          LuaTypeId::Boolean);
+    EXPECT_EQ(boolean.getStaticTypeId(),    LuaTypeId::Boolean);
+
+    EXPECT_EQ(lud.getTypeId(),              LuaTypeId::LightUserData);
+    EXPECT_EQ(lud.getStaticTypeId(),        LuaTypeId::LightUserData);
+
+    EXPECT_EQ(number.getTypeId(),           LuaTypeId::Number);
+    EXPECT_EQ(number.getStaticTypeId(),     LuaTypeId::Number);
 }
 
 TEST(TypeSystemTest, ParameterStack_BuilderInterface)
 {
     // setup
-    const int NAddedItems = 4;
-    LuaNil nil;
-    LuaBoolean boolean;
-    LuaTrivialType TRUE = true;
+    const int NAddedItems = 7;
+    LuaNil          nil;
+    LuaBoolean      lBoolean;
+    LuaTrivialType  tBoolean = true;
+    LuaNumber       lNumber = -1;
+    LuaTrivialType  tNumberI = -1;
+    LuaTrivialType  tNumberD = -1.0;
 
     // when
     ParameterStack ps;
     ps
     .addEntity(nil)
-    .addEntity(std::move(boolean))
+    .addEntity(std::move(lBoolean))
     .addEntity(nullptr)
-    .addEntity(TRUE);
+    .addEntity(tBoolean)
+    .addEntity(lNumber)
+    .addEntity(tNumberD)
+    .addEntity(tNumberI)
+    ;
 
     // then
     ASSERT_FALSE(ps.empty());
@@ -42,7 +57,7 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
     for (const auto& param : ps)
     {
         ASSERT_NE(param->getTypeId(), LuaTypeId::None);
-        std::cout << param->repr() << std::endl;
+        std::cout << param->to_string() << std::endl;
     }
 
     ASSERT_THROW(ps.at(-1), LuaInvalidArgumentError);
@@ -67,6 +82,6 @@ TEST(TypeSystemTest, ParameterStack_ImplicitConversion)
     for (const auto& param : ps)
     {
         ASSERT_NE(param->getTypeId(), LuaTypeId::None);
-        std::cout << param->repr() << std::endl;
+        std::cout << param->to_string() << std::endl;
     }
 }

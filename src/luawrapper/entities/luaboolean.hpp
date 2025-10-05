@@ -23,7 +23,7 @@ namespace LuaWrapper
             bool getValue() const;
             void setValue(const bool newValue);
 
-            std::string repr() const;
+            std::string to_string() const;
     };
 }
 

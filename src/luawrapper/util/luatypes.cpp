@@ -11,7 +11,7 @@ namespace LuaWrapper
         typeId(None)
     {}
 
-    LuaTypeId::LuaTypeId(int typeId) :
+    LuaTypeId::LuaTypeId(const int typeId) :
         typeId(typeId)
     {
         if ((typeId < None) || (typeId >= NumberOfTypes))
@@ -102,7 +102,28 @@ namespace LuaWrapper
         }
     }
 
+    void assertType(const LuaTrivialType* value, const int expectedTypeId)
+    {
+        if (value->index() != expectedTypeId)
+        {
+            throw LuaTypeError(
+                "Could not convert wrapped "s + value->getTrivialTypeName() + " "
+                "to typeId " + std::to_string(expectedTypeId)
+            );
+        }
+    }
 
+    nullptr_t LuaTrivialType::getAsNil() const
+    {
+        assertType(this, LuaTrivialType::Nil);
+        return nullptr;
+    }
+
+    int LuaTrivialType::getAsInt() const
+    {
+        assertType(this, LuaTrivialType::Integer);
+        return std::get<LuaTrivialType::Integer>(*this);
+    }
 
 }
 

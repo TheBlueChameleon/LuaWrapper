@@ -8,8 +8,7 @@ namespace LuaWrapper
     class LuaNil : public LuaEntity
     {
         public:
-            LuaNil();
-            LuaNil(nullptr_t nil);
+            LuaNil(nullptr_t nil = nullptr);
 
             static LuaTypeId getStaticTypeId();
 
@@ -20,7 +19,7 @@ namespace LuaWrapper
 
             nullptr_t getValue() const;
 
-            std::string repr() const;
+            std::string to_string() const;
     };
 }
 

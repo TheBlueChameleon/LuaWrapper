@@ -2,12 +2,8 @@
 
 namespace LuaWrapper
 {
-    LuaNil::LuaNil() :
-        LuaEntity(LuaTypeId::Nil)
-    {}
-
     LuaNil::LuaNil(nullptr_t nil) :
-        LuaNil()
+        LuaEntity(LuaTypeId::Nil)
     {}
 
     LuaTypeId LuaNil::getStaticTypeId()
@@ -35,7 +31,7 @@ namespace LuaWrapper
         return nullptr;
     }
 
-    std::string LuaNil::repr() const
+    std::string LuaNil::to_string() const
     {
         return "nil";
     }

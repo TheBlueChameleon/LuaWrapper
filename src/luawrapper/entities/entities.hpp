@@ -6,5 +6,6 @@
 #include "luaboolean.hpp"
 #include "luaentityfactory.hpp"
 #include "lualightuserdata.hpp"
+#include "luanumber.hpp"
 
 #endif // ENTITIES_H

@@ -37,7 +37,7 @@ namespace LuaWrapper
         value = newValue;
     }
 
-    std::string LuaBoolean::repr() const
+    std::string LuaBoolean::to_string() const
     {
         return (value ? "true" : "false");
     }

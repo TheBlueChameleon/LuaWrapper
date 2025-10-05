@@ -11,7 +11,7 @@ namespace LuaWrapper
 
     LuaTypeId LuaLightUserData::getStaticTypeId()
     {
-        return LuaTypeId::Boolean;
+        return LuaTypeId::LightUserData;
     }
 
     void LuaLightUserData::pushToLua(lua_State* L) const
@@ -39,7 +39,7 @@ namespace LuaWrapper
         value = newValue;
     }
 
-    std::string LuaLightUserData::repr() const
+    std::string LuaLightUserData::to_string() const
     {
         return std::format("{}", value);
     }
