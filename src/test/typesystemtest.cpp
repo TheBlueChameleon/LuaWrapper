@@ -13,6 +13,7 @@ TEST(TypeSystemTest, getTypeId)
     LuaBoolean          boolean;
     LuaLightUserData    lud;
     LuaNumber           number;
+    LuaString           string;
 
     // expect
     EXPECT_EQ(nil.getTypeId(),              LuaTypeId::Nil);
@@ -26,6 +27,9 @@ TEST(TypeSystemTest, getTypeId)
 
     EXPECT_EQ(number.getTypeId(),           LuaTypeId::Number);
     EXPECT_EQ(number.getStaticTypeId(),     LuaTypeId::Number);
+
+    EXPECT_EQ(string.getTypeId(),           LuaTypeId::String);
+    EXPECT_EQ(string.getStaticTypeId(),     LuaTypeId::String);
 }
 
 void foo() {}
