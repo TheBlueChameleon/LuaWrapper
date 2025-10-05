@@ -12,6 +12,7 @@ namespace LuaWrapper
     class LuaBoolean;
     class LuaLightUserData;
     class LuaNumber;
+    class LuaString;
 
     class LuaEntity
     {
@@ -47,6 +48,8 @@ namespace LuaWrapper
             const LuaLightUserData& asLuaLightUserData() const;
             LuaNumber& asLuaNumber();
             const LuaNumber& asLuaNumber() const;
+            LuaString& asLuaString();
+            const LuaWrapper::LuaString& asLuaString() const;
 
             virtual std::string to_string() const = 0;
     };

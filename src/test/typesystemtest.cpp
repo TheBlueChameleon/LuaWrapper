@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+using namespace std::string_literals;
 
 #include <gtest/gtest.h>
 
@@ -37,7 +39,7 @@ void foo() {}
 TEST(TypeSystemTest, ParameterStack_BuilderInterface)
 {
     // setup
-    const int NAddedItems = 9;
+    const int NAddedItems = 14;
     const void* ptrLUD = reinterpret_cast<const void*>(foo);
 
     LuaNil              nil;
@@ -48,19 +50,29 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
     LuaNumber           lNumber = -1;
     LuaTrivialType      tNumberI = -1;
     LuaTrivialType      tNumberD = -1.0;
+    LuaString           lcString = "LuaString for copy";
+    LuaString           lmString = "LuaString for move";
+    LuaTrivialType      tlString = "literal string for copy";
+    LuaTrivialType      tscString = "std::string for copy"s;
+    LuaTrivialType      tsmString = "std::string for move"s;
 
     // when
     ParameterStack ps;
     ps
-    .addEntity(nil)
-    .addEntity(nullptr)
-    .addEntity(std::move(lBoolean))
-    .addEntity(tBoolean)
-    .addEntity(lLUD)
-    .addEntity(tLUD)
-    .addEntity(lNumber)
-    .addEntity(tNumberD)
-    .addEntity(tNumberI)
+    /*  0 */ .addEntity(nil)
+    /*  1 */ .addEntity(nullptr)
+    /*  2 */ .addEntity(std::move(lBoolean))
+    /*  3 */ .addEntity(tBoolean)
+    /*  4 */ .addEntity(lLUD)
+    /*  5 */ .addEntity(tLUD)
+    /*  6 */ .addEntity(lNumber)
+    /*  7 */ .addEntity(tNumberD)
+    /*  8 */ .addEntity(tNumberI)
+    /*  9 */ .addEntity(lcString)
+    /* 10 */ .addEntity(std::move(lmString))
+    /* 11 */ .addEntity(tlString)
+    /* 12 */ .addEntity(tscString)
+    /* 13 */ .addEntity(std::move(tsmString))
     ;
 
     // then
@@ -71,6 +83,8 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
         ASSERT_NE(param->getTypeId(), LuaTypeId::None);
         std::cout << param->to_string() << std::endl;
     }
+
+    EXPECT_EQ(lcString.getValue(), "LuaString for copy");
 
     ASSERT_THROW(ps.at(-1), LuaInvalidArgumentError);
 
