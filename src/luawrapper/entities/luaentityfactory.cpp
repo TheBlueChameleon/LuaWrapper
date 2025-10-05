@@ -19,6 +19,11 @@ namespace LuaWrapper
         return new LuaBoolean(value);
     }
 
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const void* value)
+    {
+        return new LuaLightUserData(value);
+    }
+
     LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaTrivialType& value)
     {
         switch (value.index())
@@ -28,6 +33,7 @@ namespace LuaWrapper
             case LuaTrivialType::Boolean:
                 return LuaEntityFactory::makeLuaEntity(std::get<LuaTrivialType::Boolean>(value));
             case LuaTrivialType::LightUserData:
+                return LuaEntityFactory::makeLuaEntity(std::get<LuaTrivialType::LightUserData>(value));
             case LuaTrivialType::Integer:
             case LuaTrivialType::Double:
             case LuaTrivialType::CharPtr:
@@ -52,6 +58,7 @@ namespace LuaWrapper
             case LuaTrivialType::Boolean:
                 return LuaEntityFactory::makeLuaEntity(std::get<LuaTrivialType::Boolean>(value));
             case LuaTrivialType::LightUserData:
+                return LuaEntityFactory::makeLuaEntity(std::get<LuaTrivialType::LightUserData>(value));
             case LuaTrivialType::Integer:
             case LuaTrivialType::Double:
             case LuaTrivialType::CharPtr:
@@ -81,6 +88,7 @@ namespace LuaWrapper
             case LuaTypeId::Boolean:
                 return LuaEntityFactory::makeLuaEntity(value.asLuaBoolean().getValue());
             case LuaTypeId::LightUserData:
+                return LuaEntityFactory::makeLuaEntity(value.asLuaLightUserData().getValue());
             case LuaTypeId::Number:
             case LuaTypeId::String:
             case LuaTypeId::Table:
@@ -107,6 +115,7 @@ namespace LuaWrapper
             case LuaTrivialType::Boolean:
                 return LuaEntityFactory::makeLuaEntity(value.asLuaBoolean().getValue());
             case LuaTrivialType::LightUserData:
+                return LuaEntityFactory::makeLuaEntity(value.asLuaLightUserData().getValue());
             case LuaTrivialType::Integer:
             case LuaTrivialType::Double:
             case LuaTrivialType::CharPtr:

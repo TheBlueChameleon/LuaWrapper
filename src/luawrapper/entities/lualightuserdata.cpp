@@ -4,7 +4,7 @@
 
 namespace LuaWrapper
 {
-    LuaLightUserData::LuaLightUserData(void* value) :
+    LuaLightUserData::LuaLightUserData(const void* value) :
         LuaEntity(LuaTypeId::LightUserData),
         value(value)
     {}

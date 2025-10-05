@@ -60,7 +60,7 @@ void foo() {}
 TEST(TypeSystemTest, ParameterStack_ImplicitConversion)
 {
     // when
-    ParameterStack ps = {nullptr, true/*, (void*)foo*/};
+    ParameterStack ps = {nullptr, true, (void*)foo};
 
     // then
     ASSERT_EQ(ps.empty(), false);

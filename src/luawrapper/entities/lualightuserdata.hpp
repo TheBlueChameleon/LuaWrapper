@@ -11,7 +11,7 @@ namespace LuaWrapper
             const void* value;
 
         public:
-            LuaLightUserData(void* value = nullptr);
+            LuaLightUserData(const void* value = nullptr);
 
             static LuaTypeId getStaticTypeId();
 
