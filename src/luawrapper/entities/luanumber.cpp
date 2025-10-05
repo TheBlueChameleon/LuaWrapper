@@ -43,3 +43,11 @@ namespace LuaWrapper
         return std::to_string(value);
     }
 }
+
+namespace std
+{
+    size_t hash<LuaWrapper::LuaNumber>::operator()(const LuaWrapper::LuaNumber& luaEntity) const
+    {
+        return std::hash<double>()(luaEntity.getValue());
+    }
+}

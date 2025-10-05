@@ -44,3 +44,11 @@ namespace LuaWrapper
         return std::format("{}", value);
     }
 }
+
+namespace std
+{
+    size_t hash<LuaWrapper::LuaLightUserData>::operator()(const LuaWrapper::LuaLightUserData& luaEntity) const
+    {
+        return std::hash<const void*>()(luaEntity.getValue());
+    }
+}

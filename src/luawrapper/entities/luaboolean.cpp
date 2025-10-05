@@ -42,3 +42,11 @@ namespace LuaWrapper
         return (value ? "true" : "false");
     }
 }
+
+namespace std
+{
+    size_t hash<LuaWrapper::LuaBoolean>::operator()(const LuaWrapper::LuaBoolean& luaEntity) const
+    {
+        return std::hash<bool>()(luaEntity.getValue());
+    }
+}

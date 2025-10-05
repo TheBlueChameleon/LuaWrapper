@@ -5,6 +5,7 @@
 
 namespace LuaWrapper
 {
+    class LuaTypeId;
     class LuaEntity;
     class LuaTable;
     class LuaTrivialType;
@@ -15,6 +16,8 @@ namespace LuaWrapper
             LuaEntityFactory();
 
         public:
+            static LuaEntity* makeLuaEntityFromTypeId(const LuaTypeId typeId);
+
             static LuaEntity* makeLuaEntity(const nullptr_t value = nullptr);
             static LuaEntity* makeLuaEntity(const bool value);
             static LuaEntity* makeLuaEntity(const void* value);

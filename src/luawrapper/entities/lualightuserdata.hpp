@@ -27,4 +27,13 @@ namespace LuaWrapper
     };
 }
 
+namespace std
+{
+    template<>
+    struct hash<LuaWrapper::LuaLightUserData>
+    {
+        size_t operator()(const LuaWrapper::LuaLightUserData& luaEntity) const;
+    };
+}
+
 #endif // LUALIGHTUSERDATA_HPP

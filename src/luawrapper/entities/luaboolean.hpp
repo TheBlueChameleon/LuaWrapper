@@ -27,4 +27,13 @@ namespace LuaWrapper
     };
 }
 
+namespace std
+{
+    template<>
+    struct hash<LuaWrapper::LuaBoolean>
+    {
+        size_t operator()(const LuaWrapper::LuaBoolean& luaEntity) const;
+    };
+}
+
 #endif // LUABOOLEAN_HPP

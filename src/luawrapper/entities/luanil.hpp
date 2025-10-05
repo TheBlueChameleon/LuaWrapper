@@ -23,4 +23,13 @@ namespace LuaWrapper
     };
 }
 
+namespace std
+{
+    template<>
+    struct hash<LuaWrapper::LuaNil>
+    {
+        size_t operator()(const LuaWrapper::LuaNil& luaEntity) const;
+    };
+}
+
 #endif // LUANIL_HPP

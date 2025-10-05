@@ -8,5 +8,6 @@
 #include "lualightuserdata.hpp"
 #include "luanumber.hpp"
 #include "luastring.hpp"
+#include "luatable.hpp"
 
 #endif // ENTITIES_H

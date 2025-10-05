@@ -13,6 +13,7 @@ namespace LuaWrapper
     class LuaLightUserData;
     class LuaNumber;
     class LuaString;
+    class LuaTable;
 
     class LuaEntity
     {
@@ -49,9 +50,20 @@ namespace LuaWrapper
             LuaNumber& asLuaNumber();
             const LuaNumber& asLuaNumber() const;
             LuaString& asLuaString();
-            const LuaWrapper::LuaString& asLuaString() const;
+            const LuaString& asLuaString() const;
+            LuaTable& asLuaTable();
+            const LuaTable& asLuaTable() const;
 
             virtual std::string to_string() const = 0;
+    };
+}
+
+namespace std
+{
+    template<>
+    struct hash<LuaWrapper::LuaEntity>
+    {
+        size_t operator()(const LuaWrapper::LuaEntity& luaEntity) const;
     };
 }
 

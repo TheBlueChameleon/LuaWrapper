@@ -36,3 +36,11 @@ namespace LuaWrapper
         return "nil";
     }
 }
+
+namespace std
+{
+    size_t hash<LuaWrapper::LuaNil>::operator()(const LuaWrapper::LuaNil& luaEntity) const
+    {
+        return 0;
+    }
+}

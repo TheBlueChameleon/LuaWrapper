@@ -9,6 +9,41 @@ namespace LuaWrapper
 {
     LuaEntityFactory::LuaEntityFactory() {}
 
+    LuaEntity* LuaEntityFactory::makeLuaEntityFromTypeId(const LuaTypeId typeId)
+    {
+        switch (typeId)
+        {
+            case LuaTypeId::None:
+                throw LuaInvalidArgumentError(
+                    "Cannot make Lua entity of type "s + typeId.getTypeName()
+                );
+
+            case LuaTypeId::Nil:
+                return new LuaNil();
+            case LuaTypeId::Boolean:
+                return new LuaBoolean();
+            case LuaTypeId::LightUserData:
+                return new LuaLightUserData();
+            case LuaTypeId::Number:
+                return new LuaNumber();
+            case LuaTypeId::String:
+                return new LuaString();
+            case LuaTypeId::Table:
+                return new LuaTable();
+            case LuaTypeId::Function:
+            case LuaTypeId::UserData:
+            case LuaTypeId::Thread:
+                throw LuaNotImplementedError(
+                    "Not yet implemented: copy-constructing Lua Entity from "s + typeId.getTypeName()
+                );
+
+            default:
+                throw LuaInvalidArgumentError(
+                    "Cannot make Lua entity with type id "s + std::to_string(typeId)
+                );
+        }
+    }
+
     LuaEntity* LuaEntityFactory::makeLuaEntity(const nullptr_t value)
     {
         return new LuaNil();

@@ -31,4 +31,13 @@ namespace LuaWrapper
     };
 }
 
+namespace std
+{
+    template<>
+    struct hash<LuaWrapper::LuaString>
+    {
+        size_t operator()(const LuaWrapper::LuaString& luaEntity) const;
+    };
+}
+
 #endif // LUASTRING_HPP

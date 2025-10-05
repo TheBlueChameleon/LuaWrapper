@@ -16,6 +16,7 @@ TEST(TypeSystemTest, getTypeId)
     LuaLightUserData    lud;
     LuaNumber           number;
     LuaString           string;
+    LuaTable            table;
 
     // expect
     EXPECT_EQ(nil.getTypeId(),              LuaTypeId::Nil);
@@ -32,6 +33,14 @@ TEST(TypeSystemTest, getTypeId)
 
     EXPECT_EQ(string.getTypeId(),           LuaTypeId::String);
     EXPECT_EQ(string.getStaticTypeId(),     LuaTypeId::String);
+
+    EXPECT_EQ(table.getTypeId(),            LuaTypeId::Table);
+    EXPECT_EQ(table.getStaticTypeId(),      LuaTypeId::Table);
+}
+
+TEST(TypeSystemTest, LuaTableMethods)
+{
+    LuaTable table;
 }
 
 void foo() {}

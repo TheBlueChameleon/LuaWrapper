@@ -155,4 +155,49 @@ namespace LuaWrapper
     {
         return castOrThrow<const LuaString>(this);
     }
+
+    LuaTable& LuaEntity::asLuaTable()
+    {
+        return castOrThrow<LuaTable>(this);
+    }
+
+    const LuaTable& LuaEntity::asLuaTable() const
+    {
+        return castOrThrow<const LuaTable>(this);
+    }
+}
+
+namespace std
+{
+    size_t std::hash<LuaWrapper::LuaEntity>::operator()(const LuaWrapper::LuaEntity& luaEntity) const
+    {
+        switch (luaEntity.getTypeId())
+        {
+            case LuaWrapper::LuaTypeId::None:
+                return -1;
+            case LuaWrapper::LuaTypeId::Nil:
+                return std::hash<LuaWrapper::LuaNil>()(luaEntity.asLuaNil());
+            case LuaWrapper::LuaTypeId::Boolean:
+                return std::hash<LuaWrapper::LuaBoolean>()(luaEntity.asLuaBoolean());
+            case LuaWrapper::LuaTypeId::LightUserData:
+                return std::hash<LuaWrapper::LuaLightUserData>()(luaEntity.asLuaLightUserData());
+            case LuaWrapper::LuaTypeId::Number:
+                return std::hash<LuaWrapper::LuaNumber>()(luaEntity.asLuaNumber());
+            case LuaWrapper::LuaTypeId::String:
+                return std::hash<LuaWrapper::LuaString>()(luaEntity.asLuaString());
+            case LuaWrapper::LuaTypeId::Table:
+                return std::hash<LuaWrapper::LuaTable>()(luaEntity.asLuaTable());
+            case LuaWrapper::LuaTypeId::Function:
+            case LuaWrapper::LuaTypeId::UserData:
+            case LuaWrapper::LuaTypeId::Thread:
+                throw LuaWrapper::LuaNotImplementedError(
+                    "Not yet implemented: hash for "s + luaEntity.getTypeId().getTypeName()
+                );
+
+            default:
+                throw LuaWrapper::LuaInvalidArgumentError(
+                    "Cannot compute hash for Lua entity with type id "s + std::to_string(luaEntity.getTypeId())
+                );
+        }
+    }
 }
