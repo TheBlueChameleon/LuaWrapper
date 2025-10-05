@@ -28,24 +28,32 @@ TEST(TypeSystemTest, getTypeId)
     EXPECT_EQ(number.getStaticTypeId(),     LuaTypeId::Number);
 }
 
+void foo() {}
+
 TEST(TypeSystemTest, ParameterStack_BuilderInterface)
 {
     // setup
-    const int NAddedItems = 7;
-    LuaNil          nil;
-    LuaBoolean      lBoolean;
-    LuaTrivialType  tBoolean = true;
-    LuaNumber       lNumber = -1;
-    LuaTrivialType  tNumberI = -1;
-    LuaTrivialType  tNumberD = -1.0;
+    const int NAddedItems = 9;
+    const void* ptrLUD = reinterpret_cast<const void*>(foo);
+
+    LuaNil              nil;
+    LuaBoolean          lBoolean;
+    LuaTrivialType      tBoolean = true;
+    LuaLightUserData    lLUD = ptrLUD;
+    LuaTrivialType      tLUD = ptrLUD;
+    LuaNumber           lNumber = -1;
+    LuaTrivialType      tNumberI = -1;
+    LuaTrivialType      tNumberD = -1.0;
 
     // when
     ParameterStack ps;
     ps
     .addEntity(nil)
-    .addEntity(std::move(lBoolean))
     .addEntity(nullptr)
+    .addEntity(std::move(lBoolean))
     .addEntity(tBoolean)
+    .addEntity(lLUD)
+    .addEntity(tLUD)
     .addEntity(lNumber)
     .addEntity(tNumberD)
     .addEntity(tNumberI)
@@ -70,12 +78,17 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
 
 }
 
-void foo() {}
-
 TEST(TypeSystemTest, ParameterStack_ImplicitConversion)
 {
     // when
-    ParameterStack ps = {nullptr, true, (void*)foo};
+    ParameterStack ps =
+    {
+        nullptr,
+        true,
+        reinterpret_cast<const void*>(foo),
+        1,
+        1.0
+    };
 
     // then
     ASSERT_EQ(ps.empty(), false);

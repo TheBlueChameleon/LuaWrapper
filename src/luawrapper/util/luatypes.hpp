@@ -42,7 +42,7 @@ namespace LuaWrapper
 
     // ====================================================================== //
 
-    using LuaTrivialVariant = std::variant<nullptr_t, bool, void*, int, double, char*, std::string>;
+    using LuaTrivialVariant = std::variant<nullptr_t, bool, const void*, int, double, char*, std::string>;
     class LuaTrivialType : public LuaTrivialVariant
     {
         public:
