@@ -95,10 +95,15 @@ namespace std
     {
         throw LuaWrapper::LuaNotImplementedError("Not yet implemented: computing hash for LuaTable");
 
+        size_t result = 0;
         for (const auto [k, v] : luaEntity.getValue())
         {
-            // sum up hashes for key and value, maybe?
-            // return std::hash<std::string>()(luaEntity.getValue());
+            // order of entries irrelevant => sum of components is fine (commutivity of + is no issue here)
+            // correlate key and value so that [{a->A}, {b->B}] and [{a->B}, {b->A}] are distinct.
+            // bitwise xor is fast and does the job.
+            result += (k->getHash() ^ v->getHash());
         }
+
+        return result;
     }
 }

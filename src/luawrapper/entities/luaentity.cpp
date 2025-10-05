@@ -165,6 +165,11 @@ namespace LuaWrapper
     {
         return castOrThrow<const LuaTable>(this);
     }
+
+    size_t LuaEntity::getHash() const
+    {
+        return std::hash<LuaWrapper::LuaEntity>()(*this);
+    }
 }
 
 namespace std
