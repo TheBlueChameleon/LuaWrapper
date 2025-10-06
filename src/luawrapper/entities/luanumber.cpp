@@ -42,6 +42,11 @@ namespace LuaWrapper
     {
         return std::to_string(value);
     }
+
+    bool LuaNumber::operator==(const LuaNumber& other) const
+    {
+        return value == other.value;
+    }
 }
 
 namespace std

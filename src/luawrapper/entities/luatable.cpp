@@ -1,3 +1,7 @@
+#include <algorithm>
+#include <string>
+using namespace std::string_literals;
+
 #include "luatable.hpp"
 #include "entities.hpp"
 
@@ -5,6 +9,11 @@
 
 namespace LuaWrapper
 {
+    const std::unordered_set<LuaTypeId> LuaTable::allowedKeyTypes =
+    {
+        LuaTypeId::Number, LuaTypeId::String
+    };
+
     LuaTable::LuaTable() :
         LuaEntity(LuaTypeId::Table)
     {}
@@ -16,6 +25,16 @@ namespace LuaWrapper
             delete k;
             delete v;
         }
+    }
+
+    std::unordered_set<LuaTypeId> LuaTable::getAllowedKeyTypes()
+    {
+        return allowedKeyTypes;
+    }
+
+    bool LuaTable::operator==(const LuaTable& other) const
+    {
+        throw LuaNotImplementedError("Not implemented yet: compare equal tables");
     }
 
     LuaTypeId LuaTable::getStaticTypeId()
@@ -86,6 +105,79 @@ namespace LuaWrapper
          *   }
          * }
          */
+    }
+    size_t LuaTable::size() const
+    {
+        return table.size();
+    }
+
+    bool LuaTable::empty() const
+    {
+        return table.empty();
+    }
+
+    std::pair<LuaEntity*, LuaEntity*> findInternal(const LuaEntity& key, const LuaTable::EntityMap& table)
+    {
+        const auto matchesKey = [&key](const std::pair<LuaEntity*, LuaEntity*>& keyValuePair)
+        {
+            return *(keyValuePair.first) == key;
+        };
+
+        const auto it = std::find_if(table.begin(), table.end(), matchesKey);
+
+        if (it == table.end())
+        {
+            return std::make_pair(nullptr, nullptr);
+        }
+        else
+        {
+            return *it;
+        }
+    }
+
+    LuaEntity* LuaTable::find(const LuaEntity& key) const
+    {
+        return findInternal(key, table).second;
+    }
+
+    void assertValidKey(const LuaEntity& key)
+    {
+        if (!LuaTable::getAllowedKeyTypes().contains(key.getTypeId()))
+        {
+            throw LuaInvalidArgumentError(
+                "A key of type "s + key.getTypeId().getTypeName() + " may not be used."
+            );
+        }
+    }
+
+    bool LuaTable::insert(LuaEntity& key, LuaEntity& value)
+    {
+        assertValidKey(key);
+        if (find(key))
+        {
+            return false;
+        }
+
+        LuaEntity* copiedKey   = LuaEntityFactory::makeLuaEntity(key);
+        LuaEntity* copiedValue = LuaEntityFactory::makeLuaEntity(value);
+        table[copiedKey] = copiedValue;
+
+        return true;
+    }
+
+    bool LuaTable::insert(LuaEntity&& key, LuaEntity&& value)
+    {
+        assertValidKey(key);
+        if (find(key))
+        {
+            return false;
+        }
+
+        LuaEntity* movedKey   = LuaEntityFactory::makeLuaEntity(std::move(key));
+        LuaEntity* movedValue = LuaEntityFactory::makeLuaEntity(std::move(value));
+        table[movedKey] = movedValue;
+
+        return true;
     }
 }
 

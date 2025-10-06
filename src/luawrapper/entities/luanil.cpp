@@ -35,6 +35,11 @@ namespace LuaWrapper
     {
         return "nil";
     }
+
+    bool LuaNil::operator==(const LuaNil& other) const
+    {
+        return true;
+    }
 }
 
 namespace std

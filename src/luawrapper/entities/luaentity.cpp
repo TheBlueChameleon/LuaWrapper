@@ -170,6 +170,46 @@ namespace LuaWrapper
     {
         return std::hash<LuaWrapper::LuaEntity>()(*this);
     }
+
+    bool LuaEntity::operator==(const LuaEntity& other) const
+    {
+        if (typeId != other.typeId)
+        {
+            return false;
+        }
+
+        switch (getTypeId())
+        {
+            case LuaWrapper::LuaTypeId::None:
+                return false;
+            case LuaWrapper::LuaTypeId::Nil:
+                return true;
+            case LuaWrapper::LuaTypeId::Boolean:
+                return asLuaBoolean() == other.asLuaBoolean();
+            case LuaWrapper::LuaTypeId::LightUserData:
+                return asLuaLightUserData() == other.asLuaLightUserData();
+            case LuaWrapper::LuaTypeId::Number:
+                return asLuaNumber() == other.asLuaNumber();
+            case LuaWrapper::LuaTypeId::String:
+                return asLuaString() == other.asLuaString();
+            case LuaWrapper::LuaTypeId::Table:
+                return asLuaTable() == other.asLuaTable();
+            case LuaWrapper::LuaTypeId::Function:
+            case LuaWrapper::LuaTypeId::UserData:
+            case LuaWrapper::LuaTypeId::Thread:
+                throw LuaWrapper::LuaNotImplementedError(
+                    "Not yet implemented: compare equal for "s + getTypeId().getTypeName()
+                );
+
+            default:
+                throw LuaWrapper::LuaInvalidArgumentError(
+                    "Cannot compare equal for Lua entity with type id "s + std::to_string(getTypeId())
+                );
+        }
+
+
+        return true;
+    }
 }
 
 namespace std

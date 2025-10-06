@@ -56,6 +56,8 @@ namespace LuaWrapper
 
             virtual std::string to_string() const = 0;
             virtual size_t getHash() const;
+
+            bool operator==(const LuaEntity& other) const;
     };
 }
 

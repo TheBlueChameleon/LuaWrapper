@@ -68,4 +68,13 @@ namespace LuaWrapper
     };
 }
 
+namespace std
+{
+    template<>
+    struct hash<LuaWrapper::LuaTypeId>
+    {
+        size_t operator()(const LuaWrapper::LuaTypeId& typeId) const;
+    };
+}
+
 #endif // LUATYPES_H

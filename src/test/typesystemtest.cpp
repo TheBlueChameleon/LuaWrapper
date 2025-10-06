@@ -21,35 +21,72 @@ TEST(TypeSystemTest, getTypeId)
     // expect
     EXPECT_EQ(nil.getTypeId(),              LuaTypeId::Nil);
     EXPECT_EQ(nil.getStaticTypeId(),        LuaTypeId::Nil);
+    EXPECT_TRUE(nil.isNil());
 
     EXPECT_EQ(boolean.getTypeId(),          LuaTypeId::Boolean);
     EXPECT_EQ(boolean.getStaticTypeId(),    LuaTypeId::Boolean);
+    EXPECT_TRUE(boolean.isBoolean());
 
     EXPECT_EQ(lud.getTypeId(),              LuaTypeId::LightUserData);
     EXPECT_EQ(lud.getStaticTypeId(),        LuaTypeId::LightUserData);
+    EXPECT_TRUE(lud.isLightUserData());
 
     EXPECT_EQ(number.getTypeId(),           LuaTypeId::Number);
     EXPECT_EQ(number.getStaticTypeId(),     LuaTypeId::Number);
+    EXPECT_TRUE(number.isNumber());
 
     EXPECT_EQ(string.getTypeId(),           LuaTypeId::String);
     EXPECT_EQ(string.getStaticTypeId(),     LuaTypeId::String);
+    EXPECT_TRUE(string.isString());
 
     EXPECT_EQ(table.getTypeId(),            LuaTypeId::Table);
     EXPECT_EQ(table.getStaticTypeId(),      LuaTypeId::Table);
+    EXPECT_TRUE(table.isTable());
 }
 
 TEST(TypeSystemTest, LuaTableMethods)
 {
-    LuaTable table;
+    LuaNil              nil;
+    LuaBoolean          boolean;
+    LuaLightUserData    lud;
+    LuaNumber           number;
+    LuaString           string = "str";
+    LuaString           other  = "oth";
+    LuaTable            table;
+
+    ASSERT_EQ(table.size(), 0);
+    ASSERT_TRUE(table.empty());
+
+    // forbidden key types throw
+    ASSERT_THROW(table.insert(nil, table), LuaInvalidArgumentError);
+
+    ASSERT_THROW(table.insert(boolean, table), LuaInvalidArgumentError);
+
+    ASSERT_THROW(table.insert(lud, table), LuaInvalidArgumentError);
+
+    ASSERT_THROW(table.insert(table, table), LuaInvalidArgumentError);
+
+    // allowed key types do not throw and return true on insert
+    EXPECT_TRUE(table.insert(number, number));
+    EXPECT_TRUE(table.insert(string, other));
+    EXPECT_FALSE(table.insert(string, string));
+    EXPECT_TRUE(table.insert(other, string));
+    EXPECT_EQ(table.size(), 3);
+    EXPECT_EQ(*table.find(string), other);
+
+    for (const auto[keyPtr, valPtr] : table.getValue())
+    {
+        std::cout << keyPtr->to_string() << "\t" << valPtr->to_string() << std::endl;
+    }
 }
 
-void foo() {}
+void funcPtr() {}
 
 TEST(TypeSystemTest, ParameterStack_BuilderInterface)
 {
     // setup
     const int NAddedItems = 14;
-    const void* ptrLUD = reinterpret_cast<const void*>(foo);
+    const void* ptrLUD = reinterpret_cast<const void*>(funcPtr);
 
     LuaNil              nil;
     LuaBoolean          lBoolean;
@@ -90,7 +127,7 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
     for (const auto& param : ps)
     {
         ASSERT_NE(param->getTypeId(), LuaTypeId::None);
-        std::cout << param->to_string() << std::endl;
+        // std::cout << param->to_string() << std::endl;
     }
 
     EXPECT_EQ(lcString.getValue(), "LuaString for copy");
@@ -112,9 +149,11 @@ TEST(TypeSystemTest, ParameterStack_ImplicitConversion)
     {
         nullptr,
         true,
-        reinterpret_cast<const void*>(foo),
+        reinterpret_cast<const void*>(funcPtr),
         1,
-        1.0
+        1.0,
+        "char literal",
+        "string literal"s
     };
 
     // then
@@ -122,6 +161,6 @@ TEST(TypeSystemTest, ParameterStack_ImplicitConversion)
     for (const auto& param : ps)
     {
         ASSERT_NE(param->getTypeId(), LuaTypeId::None);
-        std::cout << param->to_string() << std::endl;
+        // std::cout << param->to_string() << std::endl;
     }
 }

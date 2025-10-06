@@ -22,12 +22,15 @@ namespace LuaWrapper
             void pushToLua(lua_State* L) const;
             void fetchFromLua(lua_State* L);
 
-            bool    isString() const;
+            bool isString() const;
 
             std::string getValue() const;
             void        setValue(const std::string& newValue);
 
             std::string to_string() const;
+            const char* c_str() const;
+
+            bool operator==(const LuaString& other) const;
     };
 }
 

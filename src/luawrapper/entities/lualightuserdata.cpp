@@ -43,6 +43,11 @@ namespace LuaWrapper
     {
         return std::format("{}", value);
     }
+
+    bool LuaLightUserData::operator==(const LuaLightUserData &other) const
+    {
+        return value == other.value;
+    }
 }
 
 namespace std

@@ -154,9 +154,12 @@ namespace LuaWrapper
         assertType(this, LuaTrivialType::String);
         return std::get<LuaTrivialType::String>(*this);
     }
-
 }
 
-
-
-
+namespace std
+{
+    size_t hash<LuaWrapper::LuaTypeId>::operator()(const LuaWrapper::LuaTypeId& typeId) const
+    {
+        return typeId;
+    }
+}

@@ -2,6 +2,7 @@
 #define LUATABLE_HPP
 
 #include <unordered_map>
+#include <unordered_set>
 
 #include "luaentity.hpp"
 
@@ -11,6 +12,7 @@ namespace LuaWrapper
     {
         public:
             using EntityMap = std::unordered_map<LuaEntity*, LuaEntity*>;
+            static const std::unordered_set<LuaTypeId> allowedKeyTypes;
 
         private:
             EntityMap table;
@@ -31,9 +33,21 @@ namespace LuaWrapper
 
             std::string to_string() const;
 
+            size_t size() const;
+            bool  empty() const;
+
+            LuaEntity* find(const LuaEntity& key) const;
+
+            bool insert(LuaEntity& key, LuaEntity& value);
+            bool insert(LuaEntity&& key, LuaEntity&& value);
+
             /* TODO
-             * Add Iterator
+             * Add  update, delete, ...
+             * Expose Iterator like in parameterstack
              */
+            static std::unordered_set<LuaTypeId> getAllowedKeyTypes();
+
+            bool operator==(const LuaTable& other) const;
     };
 }
 

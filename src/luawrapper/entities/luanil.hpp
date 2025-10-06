@@ -20,6 +20,8 @@ namespace LuaWrapper
             nullptr_t getValue() const;
 
             std::string to_string() const;
+
+            bool operator==(const LuaNil& other) const;
     };
 }
 

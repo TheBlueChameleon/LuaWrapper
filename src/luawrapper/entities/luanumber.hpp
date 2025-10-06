@@ -24,6 +24,8 @@ namespace LuaWrapper
             void    setValue(double newValue);
 
             std::string to_string() const;
+
+            bool operator==(const LuaNumber& other) const;
     };
 }
 

@@ -51,6 +51,16 @@ namespace LuaWrapper
     {
         return value;
     }
+
+    const char* LuaString::c_str() const
+    {
+        return value.c_str();
+    }
+
+    bool LuaString::operator==(const LuaString& other) const
+    {
+        return value == other.value;
+    }
 }
 
 namespace std

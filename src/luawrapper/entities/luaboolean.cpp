@@ -41,6 +41,11 @@ namespace LuaWrapper
     {
         return (value ? "true" : "false");
     }
+
+    bool LuaBoolean::operator==(const LuaBoolean &other) const
+    {
+        return value == other.value;
+    }
 }
 
 namespace std
