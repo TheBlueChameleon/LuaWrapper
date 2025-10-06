@@ -32,14 +32,14 @@ namespace LuaWrapper
             LuaTypeId getTypeId() const;
             static LuaTypeId getStaticTypeId();
 
-            bool isNil() const;
-            bool isBoolean() const;
-            bool isLightUserData() const;
-            bool isNumber() const;
-            bool isString() const;
-            bool isTable() const;
-            bool isFunction() const;
-            bool isThread() const;
+            virtual bool isNil() const;
+            virtual bool isBoolean() const;
+            virtual bool isLightUserData() const;
+            virtual bool isNumber() const;
+            virtual bool isString() const;
+            virtual bool isTable() const;
+            virtual bool isFunction() const;
+            virtual bool isThread() const;
 
             LuaNil& asLuaNil();
             const LuaNil& asLuaNil() const;
