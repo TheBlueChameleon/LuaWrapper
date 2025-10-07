@@ -82,6 +82,11 @@ TEST(TypeSystemTest, LuaTableMethods)
 
 void funcPtr() {}
 
+const void* exposeCString(const LuaString& luaString)
+{
+    return reinterpret_cast<const void*>(luaString.c_str());
+}
+
 TEST(TypeSystemTest, ParameterStack_BuilderInterface)
 {
     // setup
@@ -102,6 +107,8 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
     LuaTrivialType      tscString = "std::string for copy"s;
     LuaTrivialType      tsmString = "std::string for move"s;
 
+    const auto preMove = lmString.c_str();
+
     // when
     ParameterStack ps;
     ps
@@ -121,7 +128,12 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
     /* 13 */ .addEntity(std::move(tsmString))
     ;
 
+    const auto aftMove = lmString.c_str();
+    const auto newInst = ps.at(10)->asLuaString().c_str();
+
     // then
+    EXPECT_EQ(preMove, newInst);
+
     ASSERT_FALSE(ps.empty());
     EXPECT_EQ(ps.size(), NAddedItems);
     for (const auto& param : ps)

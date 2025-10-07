@@ -7,7 +7,8 @@ using namespace std::string_literals;
 
 namespace LuaWrapper
 {
-    LuaEntityFactory::LuaEntityFactory() {}
+    // ...................................................................... //
+    // from typeId
 
     LuaEntity* LuaEntityFactory::makeLuaEntityFromTypeId(const LuaTypeId typeId)
     {
@@ -44,6 +45,9 @@ namespace LuaWrapper
         }
     }
 
+    // ...................................................................... //
+    // from C++ types
+
     LuaEntity* LuaEntityFactory::makeLuaEntity(const nullptr_t value)
     {
         return new LuaNil();
@@ -78,6 +82,9 @@ namespace LuaWrapper
     {
         return new LuaString(std::move(value));
     }
+
+    // ...................................................................... //
+    // from variant
 
     LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaTrivialType& value)
     {
@@ -135,6 +142,69 @@ namespace LuaWrapper
         }
     }
 
+    // ...................................................................... //
+    // from LuaEntity
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaNil& value)
+    {
+        return new LuaNil(value);
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(LuaNil&& value)
+    {
+        return new LuaNil(std::move(value));
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaBoolean& value)
+    {
+        return new LuaBoolean(value);
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(LuaBoolean&& value)
+    {
+        return new LuaBoolean(std::move(value));
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaLightUserData& value)
+    {
+        return new LuaLightUserData(value);
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(LuaLightUserData&& value)
+    {
+        return new LuaLightUserData(std::move(value));
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaNumber& value)
+    {
+        return new LuaNumber(value);
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(LuaNumber&& value)
+    {
+        return new LuaNumber(std::move(value));
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaString& value)
+    {
+        return new LuaString(value);
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(LuaString&& value)
+    {
+        return new LuaString(std::move(value));
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaTable& value)
+    {
+        return new LuaTable(value);
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(LuaTable&& value)
+    {
+        return new LuaTable(std::move(value));
+    }
+
     LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaEntity& value)
     {
         switch (value.getTypeId())
@@ -147,13 +217,13 @@ namespace LuaWrapper
             case LuaTypeId::Nil:
                 return LuaEntityFactory::makeLuaEntity();
             case LuaTypeId::Boolean:
-                return LuaEntityFactory::makeLuaEntity(value.asLuaBoolean().getValue());
+                return LuaEntityFactory::makeLuaEntity(value.asLuaBoolean());
             case LuaTypeId::LightUserData:
-                return LuaEntityFactory::makeLuaEntity(value.asLuaLightUserData().getValue());
+                return LuaEntityFactory::makeLuaEntity(value.asLuaLightUserData());
             case LuaTypeId::Number:
-                return LuaEntityFactory::makeLuaEntity(value.asLuaNumber().getValue());
+                return LuaEntityFactory::makeLuaEntity(value.asLuaNumber());
             case LuaTypeId::String:
-                return LuaEntityFactory::makeLuaEntity(value.asLuaString().getValue());
+                return LuaEntityFactory::makeLuaEntity(value.asLuaString());
             case LuaTypeId::Table:
             case LuaTypeId::Function:
             case LuaTypeId::UserData:
@@ -181,13 +251,13 @@ namespace LuaWrapper
             case LuaTypeId::Nil:
                 return LuaEntityFactory::makeLuaEntity();
             case LuaTypeId::Boolean:
-                return LuaEntityFactory::makeLuaEntity(value.asLuaBoolean().getValue());
+                return LuaEntityFactory::makeLuaEntity(value.asLuaBoolean());
             case LuaTypeId::LightUserData:
-                return LuaEntityFactory::makeLuaEntity(value.asLuaLightUserData().getValue());
+                return LuaEntityFactory::makeLuaEntity(value.asLuaLightUserData());
             case LuaTypeId::Number:
-                return LuaEntityFactory::makeLuaEntity(value.asLuaNumber().getValue());
+                return LuaEntityFactory::makeLuaEntity(value.asLuaNumber());
             case LuaTypeId::String:
-                return LuaEntityFactory::makeLuaEntity(std::move(value.asLuaString().getValue()));
+                return LuaEntityFactory::makeLuaEntity(std::move(value.asLuaString()));
             case LuaTypeId::Table:
             case LuaTypeId::Function:
             case LuaTypeId::UserData:

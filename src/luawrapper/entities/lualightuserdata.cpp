@@ -4,6 +4,10 @@
 
 namespace LuaWrapper
 {
+    LuaLightUserData::LuaLightUserData() :
+        LuaLightUserData(nullptr)
+    {}
+
     LuaLightUserData::LuaLightUserData(const void* value) :
         LuaEntity(LuaTypeId::LightUserData),
         value(value)
@@ -44,7 +48,7 @@ namespace LuaWrapper
         return std::format("{}", value);
     }
 
-    bool LuaLightUserData::operator==(const LuaLightUserData &other) const
+    bool LuaLightUserData::operator==(const LuaLightUserData& other) const
     {
         return value == other.value;
     }

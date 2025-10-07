@@ -2,6 +2,10 @@
 
 namespace LuaWrapper
 {
+    LuaBoolean::LuaBoolean() :
+        LuaBoolean(true)
+    {}
+
     LuaBoolean::LuaBoolean(bool value) :
         LuaEntity(LuaTypeId::Boolean),
         value(value)
@@ -42,7 +46,7 @@ namespace LuaWrapper
         return (value ? "true" : "false");
     }
 
-    bool LuaBoolean::operator==(const LuaBoolean &other) const
+    bool LuaBoolean::operator==(const LuaBoolean& other) const
     {
         return value == other.value;
     }

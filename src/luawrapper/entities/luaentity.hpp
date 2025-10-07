@@ -18,7 +18,7 @@ namespace LuaWrapper
     class LuaEntity
     {
         protected:
-            const LuaTypeId typeId;
+            LuaTypeId typeId;
 
             LuaEntity(const LuaTypeId);
 

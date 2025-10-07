@@ -13,9 +13,13 @@ namespace LuaWrapper
             std::string value;
 
         public:
-            LuaString(const char* value = "");
+            LuaString();
+            LuaString(const char* value);
             LuaString(const std::string& value);
             LuaString(std::string&& value);
+
+            LuaString(const LuaString& other) = default;
+            LuaString(LuaString&& other);
 
             static LuaTypeId getStaticTypeId();
 
@@ -24,7 +28,7 @@ namespace LuaWrapper
 
             bool isString() const;
 
-            std::string getValue() const;
+            const std::string& getValue() const;
             void        setValue(const std::string& newValue);
 
             std::string to_string() const;

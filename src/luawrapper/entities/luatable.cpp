@@ -150,7 +150,7 @@ namespace LuaWrapper
         }
     }
 
-    bool LuaTable::insert(LuaEntity& key, LuaEntity& value)
+    bool LuaTable::insert(const LuaEntity &key, const LuaEntity &value)
     {
         assertValidKey(key);
         if (find(key))

@@ -8,7 +8,11 @@ namespace LuaWrapper
     class LuaNil : public LuaEntity
     {
         public:
-            LuaNil(nullptr_t nil = nullptr);
+            LuaNil();
+            LuaNil(nullptr_t nil);
+
+            LuaNil(const LuaNil& other) = default;
+            LuaNil(LuaNil&& other) = default;
 
             static LuaTypeId getStaticTypeId();
 

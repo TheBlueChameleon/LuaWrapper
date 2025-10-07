@@ -2,6 +2,14 @@
 
 namespace LuaWrapper
 {
+    LuaString::LuaString() :
+        LuaString("")
+    {}
+
+    LuaString::LuaString(LuaString&& other) :
+        LuaString(std::move(other.value))
+    {}
+
     LuaString::LuaString(const char* value) :
         LuaEntity(LuaTypeId::String),
         value(value)
@@ -37,7 +45,7 @@ namespace LuaWrapper
         return true;
     }
 
-    std::string LuaString::getValue() const
+    const std::string& LuaString::getValue() const
     {
         return value;
     }

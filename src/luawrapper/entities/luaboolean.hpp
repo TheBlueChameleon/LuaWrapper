@@ -11,7 +11,11 @@ namespace LuaWrapper
             bool value;
 
         public:
-            LuaBoolean(bool value = true);
+            LuaBoolean();
+            LuaBoolean(bool value);
+
+            LuaBoolean(const LuaBoolean& other) = default;
+            LuaBoolean(LuaBoolean&& other) = default;
 
             static LuaTypeId getStaticTypeId();
 

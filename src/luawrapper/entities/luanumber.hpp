@@ -11,7 +11,11 @@ namespace LuaWrapper
             double value;
 
         public:
-            LuaNumber(const double value = 0.0);
+            LuaNumber();
+            LuaNumber(const double value);
+
+            LuaNumber(const LuaNumber& other) = default;
+            LuaNumber(LuaNumber&& other) = default;
 
             static LuaTypeId getStaticTypeId();
 

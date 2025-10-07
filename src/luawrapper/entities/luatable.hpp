@@ -38,12 +38,16 @@ namespace LuaWrapper
 
             LuaEntity* find(const LuaEntity& key) const;
 
-            bool insert(LuaEntity& key, LuaEntity& value);
+            bool insert(const LuaEntity& key, const LuaEntity& value);
             bool insert(LuaEntity&& key, LuaEntity&& value);
 
+            void update(const LuaEntity& key, const LuaEntity& value);
+            void update(LuaEntity&& key, LuaEntity&& value);
+
             /* TODO
-             * Add  update, delete, ...
+             * Add update, delete, ...
              * Expose Iterator like in parameterstack
+             * remove _etValue?
              */
             static std::unordered_set<LuaTypeId> getAllowedKeyTypes();
 

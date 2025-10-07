@@ -2,6 +2,10 @@
 
 namespace LuaWrapper
 {
+    LuaNil::LuaNil() :
+        LuaNil(nullptr)
+    {}
+
     LuaNil::LuaNil(nullptr_t nil) :
         LuaEntity(LuaTypeId::Nil)
     {}

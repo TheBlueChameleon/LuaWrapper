@@ -2,6 +2,9 @@
 
 namespace LuaWrapper
 {
+    LuaNumber::LuaNumber() :
+        LuaNumber(0.0)
+    {}
 
     LuaNumber::LuaNumber(const double value) :
         LuaEntity(LuaTypeId::Number),
