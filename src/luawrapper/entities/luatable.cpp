@@ -94,21 +94,26 @@ namespace LuaWrapper
     LuaTable::EntitySet LuaTable::getKeySet() const
     {
         EntitySet result;
-        // TODO
-        // std::transform(table.begin(), table.end(),
-        //                std::inserter(result, result.end()),
-        //                [](std::pair<const LuaTable*, const LuaTable*>& item)
-        // {
-        //     return item.first;
-        // });
-
+        result.reserve(table.size());
+        std::transform(table.begin(), table.end(),
+                       std::inserter(result, result.end()),
+                       [](const std::pair<LuaEntity* const, LuaEntity* const>& item)
+        {
+            return item.first;
+        });
         return result;
     }
 
     LuaTable::EntitySet LuaTable::getValueSet() const
     {
         EntitySet result;
-        // TODO
+        result.reserve(table.size());
+        std::transform(table.begin(), table.end(),
+                       std::inserter(result, result.end()),
+                       [](const std::pair<LuaEntity* const, LuaEntity* const>& item)
+        {
+            return item.second;
+        });
         return result;
     }
 
