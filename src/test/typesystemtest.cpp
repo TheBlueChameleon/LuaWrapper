@@ -15,6 +15,11 @@ void* getVoidPtr()
     return reinterpret_cast<void*>(funcPtr);
 }
 
+const void* exposeCString(const LuaString& luaString)
+{
+    return reinterpret_cast<const void*>(luaString.c_str());
+}
+
 TEST(TypeSystemTest, getTypeId)
 {
     // setup
@@ -108,17 +113,39 @@ TEST(TypeSystemTest, LuaTableMethods)
 
     table.erase(other);
     EXPECT_EQ(table.size(), 3);
-
-    for (const auto[keyPtr, valPtr] : table)
-    {
-        std::cout << keyPtr->to_string() << "\t" << valPtr->to_string() << std::endl;
-    }
 }
 
-const void* exposeCString(const LuaString& luaString)
+TEST(TypeSystemTest, NestedTableRepr)
 {
-    return reinterpret_cast<const void*>(luaString.c_str());
+    LuaTable            outer;
+    LuaTable            middle;
+    LuaTable            inner;
+    LuaTable            empty;
+
+    inner.insert(LuaString("thy"), LuaString("bar"));
+    middle.insert(LuaString("foo"), inner);
+    outer.insert(LuaString("key"), middle);
+    outer.insert(LuaString("M_T"), empty);
+
+    /* yes, I do know about raw strings. BUT.
+     * notice the whitespaces at the end of some lines?
+     * yeah, IDEs don't like trailing whitespaces.
+     */
+    const auto expected = "{ TABLE:\n"
+                          "  M_T : \n"
+                          "  { TABLE:\n"
+                          "  }\n"
+                          "  key : \n"
+                          "  { TABLE:\n"
+                          "    foo : \n"
+                          "    { TABLE:\n"
+                          "      thy : bar\n"
+                          "    }\n"
+                          "  }\n"
+                          "}\n";
+    EXPECT_EQ(outer.to_string(), expected);
 }
+
 
 TEST(TypeSystemTest, ParameterStack_BuilderInterface)
 {

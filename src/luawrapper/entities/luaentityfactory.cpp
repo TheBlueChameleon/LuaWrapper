@@ -35,7 +35,7 @@ namespace LuaWrapper
             case LuaTypeId::UserData:
             case LuaTypeId::Thread:
                 throw LuaNotImplementedError(
-                    "Not yet implemented: copy-constructing Lua Entity from "s + typeId.getTypeName()
+                    "Not yet implemented: constructing Lua Entity from "s + typeId.getTypeName()
                 );
 
             default:
@@ -73,6 +73,11 @@ namespace LuaWrapper
         return new LuaNumber(value);
     }
 
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const char* value)
+    {
+        return new LuaString(value);
+    }
+
     LuaEntity* LuaEntityFactory::makeLuaEntity(const std::string& value)
     {
         return new LuaString(value);
@@ -101,9 +106,7 @@ namespace LuaWrapper
             case LuaTrivialType::Double:
                 return LuaEntityFactory::makeLuaEntity(value.getAsDouble());
             case LuaTrivialType::CharPtr:
-                throw LuaNotImplementedError(
-                    "Not yet implemented: copy-constructing Lua Entity from "s + value.getTrivialTypeName()
-                );
+                return LuaEntityFactory::makeLuaEntity(value.getAsCharPtr());
             case LuaTrivialType::String:
                 return LuaEntityFactory::makeLuaEntity(value.getAsString());
 
@@ -129,9 +132,7 @@ namespace LuaWrapper
             case LuaTrivialType::Double:
                 return LuaEntityFactory::makeLuaEntity(value.getAsDouble());
             case LuaTrivialType::CharPtr:
-                throw LuaNotImplementedError(
-                    "Not yet implemented: move-constructing Lua Entity from "s + value.getTrivialTypeName()
-                );
+                return LuaEntityFactory::makeLuaEntity(value.getAsCharPtr());
             case LuaTrivialType::String:
                 return LuaEntityFactory::makeLuaEntity(std::move(value.getAsString()));
 
@@ -265,7 +266,7 @@ namespace LuaWrapper
             case LuaTypeId::UserData:
             case LuaTypeId::Thread:
                 throw LuaNotImplementedError(
-                    "Not yet implemented: copy-constructing Lua Entity from "s + value.getTypeId().getTypeName()
+                    "Not yet implemented: move-constructing Lua Entity from "s + value.getTypeId().getTypeName()
                 );
 
             default:
