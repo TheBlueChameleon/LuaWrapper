@@ -1,5 +1,7 @@
 #include <algorithm>
+#include <sstream>
 #include <string>
+#include <string_view>
 using namespace std::string_literals;
 
 #include "luatable.hpp"
@@ -292,7 +294,35 @@ namespace LuaWrapper
 
     std::string LuaTable::to_string() const
     {
-        throw LuaNotImplementedError("Not implemented yet: table repr");
+        const std::string indent = "  ";
+        std::stringstream buffer;
+
+        buffer << "{ TABLE:" << std::endl;
+        for (const auto& [k, v] : table)
+        {
+            buffer << indent << k->to_string() << " : ";
+
+            const std::string valueRepr = v->to_string();
+            size_t nextLinebreakOffset = valueRepr.find('\n');
+            if (nextLinebreakOffset == std::string::npos)
+            {
+                buffer << valueRepr << std::endl;
+            }
+            else
+            {
+                buffer << std::endl;
+                size_t lastLinebreakOffset = 0;
+                while (nextLinebreakOffset != std::string::npos)
+                {
+                    std::string_view view = std::string_view(valueRepr.begin() + lastLinebreakOffset, valueRepr.begin() + nextLinebreakOffset);
+                    buffer << indent <<view << std::endl;
+
+                    lastLinebreakOffset = nextLinebreakOffset + 1;
+                    nextLinebreakOffset = valueRepr.find('\n', lastLinebreakOffset);
+                }
+            }
+        }
+        buffer << "}" << std::endl;
 
         /* INTENDED OUTPUT:
          * { TABLE:
@@ -303,6 +333,7 @@ namespace LuaWrapper
          *   }
          * }
          */
+        return buffer.str();
     }
 }
 
@@ -310,8 +341,6 @@ namespace std
 {
     size_t hash<LuaWrapper::LuaTable>::operator()(const LuaWrapper::LuaTable& luaEntity) const
     {
-        throw LuaWrapper::LuaNotImplementedError("Not yet implemented: computing hash for LuaTable");
-
         size_t result = 0;
         for (const auto [k, v] : luaEntity.getEntityMap())
         {
