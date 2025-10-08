@@ -166,6 +166,16 @@ namespace LuaWrapper
         return castOrThrow<const LuaTable>(this);
     }
 
+    LuaFunction& LuaEntity::asLuaFunction()
+    {
+        return castOrThrow<LuaFunction>(this);
+    }
+
+    const LuaFunction& LuaEntity::asLuaFunction() const
+    {
+        return castOrThrow<const LuaFunction>(this);
+    }
+
     size_t LuaEntity::getHash() const
     {
         return std::hash<LuaWrapper::LuaEntity>()(*this);

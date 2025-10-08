@@ -206,6 +206,16 @@ namespace LuaWrapper
         return new LuaTable(std::move(value));
     }
 
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaFunction& value)
+    {
+        return new LuaFunction(value);
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(LuaFunction&& value)
+    {
+        return new LuaFunction(std::move(value));
+    }
+
     LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaEntity& value)
     {
         switch (value.getTypeId())
@@ -228,6 +238,7 @@ namespace LuaWrapper
             case LuaTypeId::Table:
                 return LuaEntityFactory::makeLuaEntity(value.asLuaTable());
             case LuaTypeId::Function:
+                return LuaEntityFactory::makeLuaEntity(value.asLuaFunction());
             case LuaTypeId::UserData:
             case LuaTypeId::Thread:
                 throw LuaNotImplementedError(

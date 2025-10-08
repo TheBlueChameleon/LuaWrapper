@@ -14,6 +14,7 @@ namespace LuaWrapper
     class LuaNumber;
     class LuaString;
     class LuaTable;
+    class LuaFunction;
 
     class LuaEntity
     {
@@ -49,6 +50,8 @@ namespace LuaWrapper
             const LuaString& asLuaString() const;
             LuaTable& asLuaTable();
             const LuaTable& asLuaTable() const;
+            LuaFunction& asLuaFunction();
+            const LuaFunction& asLuaFunction() const;
 
             virtual size_t getHash() const;
             bool operator==(const LuaEntity& other) const;

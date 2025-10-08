@@ -15,6 +15,7 @@ namespace LuaWrapper
     class LuaNumber;
     class LuaString;
     class LuaTable;
+    class LuaFunction;
 
     class LuaEntityFactory
     {
@@ -32,6 +33,7 @@ namespace LuaWrapper
             static LuaEntity* makeLuaEntity(const char* const value);
             static LuaEntity* makeLuaEntity(const std::string& value);
             static LuaEntity* makeLuaEntity(std::string&& value);
+            // TODO make from lua_CFunction?
 
             static LuaEntity* makeLuaEntity(const LuaTrivialType& value);
             static LuaEntity* makeLuaEntity(LuaTrivialType&& value);
@@ -48,6 +50,8 @@ namespace LuaWrapper
             static LuaEntity* makeLuaEntity(LuaString&& value);
             static LuaEntity* makeLuaEntity(const LuaTable& value);
             static LuaEntity* makeLuaEntity(LuaTable&& value);
+            static LuaEntity* makeLuaEntity(const LuaFunction& value);
+            static LuaEntity* makeLuaEntity(LuaFunction&& value);
 
             static LuaEntity* makeLuaEntity(LuaEntity&& value);
             static LuaEntity* makeLuaEntity(const LuaEntity& value);

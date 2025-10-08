@@ -35,7 +35,7 @@ namespace LuaWrapper
         value = newValue;
     }
 
-    ParameterStack LuaFunction::invoke(const ParameterStack& args)
+    ParameterStack LuaFunction::invoke(lua_State* const L, const ParameterStack& args)
     {
         throw LuaNotImplementedError("Not implemented: LuaFunction::invoke");
     }
@@ -58,5 +58,15 @@ namespace LuaWrapper
     std::string LuaFunction::to_string() const
     {
         return std::format("Function @ {}", reinterpret_cast<void*>(value));
+    }
+}
+
+namespace std
+{
+    std::size_t std::hash<LuaWrapper::LuaFunction>::operator()(const LuaWrapper::LuaFunction& luaEntity) const
+    {
+        return std::hash<const void*>()(
+                   reinterpret_cast<const void*>(luaEntity.getValue())
+               );
     }
 }

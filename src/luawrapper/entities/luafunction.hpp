@@ -28,13 +28,22 @@ namespace LuaWrapper
             lua_CFunction getValue() const;
             void setValue(lua_CFunction newValue);
 
-            ParameterStack invoke(const ParameterStack& args);
+            ParameterStack invoke(lua_State* const L, const ParameterStack& args);
 
             bool operator==(const LuaFunction& other) const;
 
             void pushToLua(lua_State* L) const;
             void fetchFromLua(lua_State* L);
             std::string to_string() const;
+    };
+}
+
+namespace std
+{
+    template<>
+    struct hash<LuaWrapper::LuaFunction>
+    {
+        size_t operator()(const LuaWrapper::LuaFunction& luaEntity) const;
     };
 }
 

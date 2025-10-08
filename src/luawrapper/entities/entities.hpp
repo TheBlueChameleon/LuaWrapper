@@ -9,5 +9,6 @@
 #include "luanumber.hpp"
 #include "luastring.hpp"
 #include "luatable.hpp"
+#include "luafunction.hpp"
 
 #endif // ENTITIES_H

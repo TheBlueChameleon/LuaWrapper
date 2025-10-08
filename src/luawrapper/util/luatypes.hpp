@@ -42,6 +42,7 @@ namespace LuaWrapper
 
     // ====================================================================== //
 
+    // TODO: add lua_CFunction?
     using LuaTrivialVariant = std::variant<nullptr_t, bool, const void*, int, double, char*, std::string>;
     class LuaTrivialType : public LuaTrivialVariant
     {
