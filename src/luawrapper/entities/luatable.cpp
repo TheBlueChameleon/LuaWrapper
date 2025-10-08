@@ -233,7 +233,26 @@ namespace LuaWrapper
 
     bool LuaTable::operator==(const LuaTable& other) const
     {
-        throw LuaNotImplementedError("Not implemented yet: compare equal tables");
+        if (table.size() != other.size())
+        {
+            return false;
+        }
+
+        for (const auto& [k, v] : table)
+        {
+            LuaEntity* otherValue = other.find(*k);
+            if (otherValue == nullptr)
+            {
+                return false;
+            }
+
+            if (*v != *otherValue)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     void LuaTable::pushToLua(lua_State* L) const
