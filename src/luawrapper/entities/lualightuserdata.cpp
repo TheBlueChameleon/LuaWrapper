@@ -18,16 +18,6 @@ namespace LuaWrapper
         return LuaTypeId::LightUserData;
     }
 
-    void LuaLightUserData::pushToLua(lua_State* L) const
-    {
-        lua_pushlightuserdata(L, const_cast<void*>(value));
-    }
-
-    void LuaLightUserData::fetchFromLua(lua_State* L)
-    {
-        value = lua_topointer(L, -1);
-    }
-
     bool LuaLightUserData::isLightUserData() const
     {
         return true;
@@ -43,14 +33,24 @@ namespace LuaWrapper
         value = newValue;
     }
 
-    std::string LuaLightUserData::to_string() const
-    {
-        return std::format("{}", value);
-    }
-
     bool LuaLightUserData::operator==(const LuaLightUserData& other) const
     {
         return value == other.value;
+    }
+
+    void LuaLightUserData::pushToLua(lua_State* L) const
+    {
+        lua_pushlightuserdata(L, const_cast<void*>(value));
+    }
+
+    void LuaLightUserData::fetchFromLua(lua_State* L)
+    {
+        value = lua_topointer(L, -1);
+    }
+
+    std::string LuaLightUserData::to_string() const
+    {
+        return std::format("{}", value);
     }
 }
 

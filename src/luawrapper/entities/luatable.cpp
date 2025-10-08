@@ -82,6 +82,11 @@ namespace LuaWrapper
         return true;
     }
 
+    std::unordered_set<LuaTypeId> LuaTable::getAllowedKeyTypes()
+    {
+        return allowedKeyTypes;
+    }
+
     const LuaTable::EntityMap& LuaTable::getEntityMap() const
     {
         return table;
@@ -111,11 +116,6 @@ namespace LuaWrapper
             return item.second;
         });
         return result;
-    }
-
-    std::unordered_set<LuaTypeId> LuaTable::getAllowedKeyTypes()
-    {
-        return allowedKeyTypes;
     }
 
     size_t LuaTable::size() const
@@ -231,6 +231,11 @@ namespace LuaWrapper
         return true;
     }
 
+    bool LuaTable::operator==(const LuaTable& other) const
+    {
+        throw LuaNotImplementedError("Not implemented yet: compare equal tables");
+    }
+
     void LuaTable::pushToLua(lua_State* L) const
     {
         lua_newtable(L);
@@ -279,11 +284,6 @@ namespace LuaWrapper
          *   }
          * }
          */
-    }
-
-    bool LuaTable::operator==(const LuaTable& other) const
-    {
-        throw LuaNotImplementedError("Not implemented yet: compare equal tables");
     }
 }
 

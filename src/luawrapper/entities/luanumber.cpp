@@ -16,16 +16,6 @@ namespace LuaWrapper
         return LuaTypeId::Number;
     }
 
-    void LuaNumber::pushToLua(lua_State* L) const
-    {
-
-    }
-
-    void LuaNumber::fetchFromLua(lua_State* L)
-    {
-
-    }
-
     bool LuaNumber::isNumber() const
     {
         return true;
@@ -41,14 +31,24 @@ namespace LuaWrapper
         value = newValue;
     }
 
-    std::string LuaNumber::to_string() const
-    {
-        return std::to_string(value);
-    }
-
     bool LuaNumber::operator==(const LuaNumber& other) const
     {
         return value == other.value;
+    }
+
+    void LuaNumber::pushToLua(lua_State* L) const
+    {
+        lua_pushnumber(L, value);
+    }
+
+    void LuaNumber::fetchFromLua(lua_State* L)
+    {
+        value = lua_tonumber(L, -1);
+    }
+
+    std::string LuaNumber::to_string() const
+    {
+        return std::to_string(value);
     }
 }
 

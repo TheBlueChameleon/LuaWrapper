@@ -44,11 +44,11 @@ namespace LuaWrapper
 
             bool isTable() const;
 
+            static std::unordered_set<LuaTypeId> getAllowedKeyTypes();
+
             const EntityMap& getEntityMap() const;
             EntitySet getKeySet() const;
             EntitySet getValueSet() const;
-
-            static std::unordered_set<LuaTypeId> getAllowedKeyTypes();
 
             size_t size() const;
             bool  empty() const;
@@ -69,12 +69,12 @@ namespace LuaWrapper
             void clear();
             bool erase(const LuaEntity& key);
 
+            bool operator==(const LuaTable& other) const;
+
             void pushToLua(lua_State* L) const;
             void fetchFromLua(lua_State* L);
 
             std::string to_string() const;
-
-            bool operator==(const LuaTable& other) const;
     };
 }
 

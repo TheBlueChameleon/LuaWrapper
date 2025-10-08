@@ -16,16 +16,6 @@ namespace LuaWrapper
         return LuaTypeId::Boolean;
     }
 
-    void LuaBoolean::pushToLua(lua_State* L) const
-    {
-        lua_pushboolean(L, value);
-    }
-
-    void LuaBoolean::fetchFromLua(lua_State* L)
-    {
-        value = lua_toboolean(L, -1);
-    }
-
     bool LuaBoolean::isBoolean() const
     {
         return true;
@@ -41,14 +31,24 @@ namespace LuaWrapper
         value = newValue;
     }
 
-    std::string LuaBoolean::to_string() const
-    {
-        return (value ? "true" : "false");
-    }
-
     bool LuaBoolean::operator==(const LuaBoolean& other) const
     {
         return value == other.value;
+    }
+
+    void LuaBoolean::pushToLua(lua_State* L) const
+    {
+        lua_pushboolean(L, value);
+    }
+
+    void LuaBoolean::fetchFromLua(lua_State* L)
+    {
+        value = lua_toboolean(L, -1);
+    }
+
+    std::string LuaBoolean::to_string() const
+    {
+        return (value ? "true" : "false");
     }
 }
 

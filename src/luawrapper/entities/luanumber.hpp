@@ -21,17 +21,17 @@ namespace LuaWrapper
 
             static LuaTypeId getStaticTypeId();
 
-            void pushToLua(lua_State* L) const;
-            void fetchFromLua(lua_State* L);
-
             bool    isNumber() const;
 
             double  getValue() const;
             void    setValue(double newValue);
 
-            std::string to_string() const;
-
             bool operator==(const LuaNumber& other) const;
+
+            void pushToLua(lua_State* L) const;
+            void fetchFromLua(lua_State* L);
+
+            std::string to_string() const;
     };
 }
 
