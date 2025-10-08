@@ -207,7 +207,6 @@ namespace LuaWrapper
                 );
         }
 
-
         return true;
     }
 }

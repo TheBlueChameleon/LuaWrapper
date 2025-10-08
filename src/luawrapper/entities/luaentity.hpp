@@ -25,10 +25,6 @@ namespace LuaWrapper
         public:
             virtual ~LuaEntity();
 
-            virtual void pushToLua(lua_State* L) const = 0;
-            virtual void fetchFromLua(lua_State* L) = 0;
-            void popFromLua(lua_State* L);
-
             LuaTypeId getTypeId() const;
             static LuaTypeId getStaticTypeId();
 
@@ -54,10 +50,14 @@ namespace LuaWrapper
             LuaTable& asLuaTable();
             const LuaTable& asLuaTable() const;
 
-            virtual std::string to_string() const = 0;
             virtual size_t getHash() const;
-
             bool operator==(const LuaEntity& other) const;
+
+            virtual void pushToLua(lua_State* L) const = 0;
+            virtual void fetchFromLua(lua_State* L) = 0;
+            void popFromLua(lua_State* L);
+
+            virtual std::string to_string() const = 0;
     };
 }
 

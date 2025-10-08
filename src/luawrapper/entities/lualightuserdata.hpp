@@ -16,6 +16,8 @@ namespace LuaWrapper
 
             LuaLightUserData(const LuaLightUserData& other) = default;
             LuaLightUserData(LuaLightUserData&& other) = default;
+            LuaLightUserData& operator=(const LuaLightUserData& other) = default;
+            LuaLightUserData& operator=(LuaLightUserData&& other) = default;
 
             static LuaTypeId getStaticTypeId();
 

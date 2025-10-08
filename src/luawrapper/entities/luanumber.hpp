@@ -16,6 +16,8 @@ namespace LuaWrapper
 
             LuaNumber(const LuaNumber& other) = default;
             LuaNumber(LuaNumber&& other) = default;
+            LuaNumber& operator=(const LuaNumber& other) = default;
+            LuaNumber& operator=(LuaNumber&& other) = default;
 
             static LuaTypeId getStaticTypeId();
 

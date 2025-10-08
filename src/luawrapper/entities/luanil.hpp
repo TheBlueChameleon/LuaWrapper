@@ -13,19 +13,21 @@ namespace LuaWrapper
 
             LuaNil(const LuaNil& other) = default;
             LuaNil(LuaNil&& other) = default;
+            LuaNil& operator=(const LuaNil& other) = default;
+            LuaNil& operator=(LuaNil&& other) = default;
 
             static LuaTypeId getStaticTypeId();
-
-            void pushToLua(lua_State* L) const;
-            void fetchFromLua(lua_State* L);
 
             bool isNil() const;
 
             nullptr_t getValue() const;
 
-            std::string to_string() const;
-
             bool operator==(const LuaNil& other) const;
+
+            void pushToLua(lua_State* L) const;
+            void fetchFromLua(lua_State* L);
+
+            std::string to_string() const;
     };
 }
 

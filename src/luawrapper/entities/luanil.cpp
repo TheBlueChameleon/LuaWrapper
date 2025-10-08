@@ -15,16 +15,6 @@ namespace LuaWrapper
         return LuaTypeId::Nil;
     }
 
-    void LuaNil::pushToLua(lua_State* L) const
-    {
-        lua_pushnil(L);
-    }
-
-    void LuaNil::fetchFromLua(lua_State* L)
-    {
-        // sic: no-op
-    }
-
     bool LuaNil::isNil() const
     {
         return true;
@@ -35,14 +25,24 @@ namespace LuaWrapper
         return nullptr;
     }
 
-    std::string LuaNil::to_string() const
-    {
-        return "nil";
-    }
-
     bool LuaNil::operator==(const LuaNil& other) const
     {
         return true;
+    }
+
+    void LuaNil::pushToLua(lua_State* L) const
+    {
+        lua_pushnil(L);
+    }
+
+    void LuaNil::fetchFromLua(lua_State* L)
+    {
+        // sic: no-op
+    }
+
+    std::string LuaNil::to_string() const
+    {
+        return "nil";
     }
 }
 

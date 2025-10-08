@@ -44,6 +44,21 @@ TEST(TypeSystemTest, getTypeId)
     EXPECT_TRUE(table.isTable());
 }
 
+TEST(TypeSystemTest, DefaultAssignments)
+{
+    // setup
+    LuaNil              nil;
+    LuaBoolean          boolean;
+    LuaLightUserData    lud;
+    LuaNumber           number;
+    LuaString           string;
+    LuaTable            table;
+
+    // when
+    nil = nullptr;
+    boolean = false;
+}
+
 TEST(TypeSystemTest, LuaTableMethods)
 {
     LuaNil              nil;

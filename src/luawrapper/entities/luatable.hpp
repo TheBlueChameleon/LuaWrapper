@@ -19,6 +19,12 @@ namespace LuaWrapper
 
         public:
             LuaTable();
+
+            LuaTable(const LuaTable& other);
+            LuaTable(LuaTable&& other);
+            LuaTable& operator=(const LuaTable& other) = default;
+            LuaTable& operator=(LuaTable&& other);
+
             ~LuaTable();
 
             static LuaTypeId getStaticTypeId();

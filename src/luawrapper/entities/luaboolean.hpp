@@ -16,20 +16,22 @@ namespace LuaWrapper
 
             LuaBoolean(const LuaBoolean& other) = default;
             LuaBoolean(LuaBoolean&& other) = default;
+            LuaBoolean& operator=(const LuaBoolean& other) = default;
+            LuaBoolean& operator=(LuaBoolean&& other) = default;
 
             static LuaTypeId getStaticTypeId();
-
-            void pushToLua(lua_State* L) const;
-            void fetchFromLua(lua_State* L);
 
             bool isBoolean() const;
 
             bool getValue() const;
             void setValue(const bool newValue);
 
-            std::string to_string() const;
-
             bool operator==(const LuaBoolean& other) const;
+
+            void pushToLua(lua_State* L) const;
+            void fetchFromLua(lua_State* L);
+
+            std::string to_string() const;
     };
 }
 

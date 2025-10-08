@@ -10,6 +10,12 @@ namespace LuaWrapper
         LuaString(std::move(other.value))
     {}
 
+    LuaString& LuaString::operator=(LuaString&& other)
+    {
+        this->value = std::move(other.value);
+        return *this;
+    }
+
     LuaString::LuaString(const char* value) :
         LuaEntity(LuaTypeId::String),
         value(value)

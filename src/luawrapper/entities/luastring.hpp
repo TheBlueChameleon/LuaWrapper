@@ -20,6 +20,8 @@ namespace LuaWrapper
 
             LuaString(const LuaString& other) = default;
             LuaString(LuaString&& other);
+            LuaString& operator=(const LuaString& other) = default;
+            LuaString& operator=(LuaString&& other);
 
             static LuaTypeId getStaticTypeId();
 

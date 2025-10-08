@@ -11,12 +11,29 @@ namespace LuaWrapper
 {
     const std::unordered_set<LuaTypeId> LuaTable::allowedKeyTypes =
     {
-        LuaTypeId::Number, LuaTypeId::String
+        LuaTypeId::LightUserData, LuaTypeId::Number, LuaTypeId::String
     };
 
     LuaTable::LuaTable() :
         LuaEntity(LuaTypeId::Table)
     {}
+
+    LuaTable::LuaTable(const LuaTable& other) :
+        LuaEntity(LuaTypeId::Table)
+    {
+        throw LuaNotImplementedError("Not yet implemented: Copy CTOR for LuaTable");
+    }
+
+    LuaTable::LuaTable(LuaTable&& other) :
+        LuaEntity(LuaTypeId::Table),
+        table(std::move(other.table))
+    {}
+
+    LuaTable& LuaTable::operator=(LuaTable&& other)
+    {
+        table = std::move(other.table);
+        return *this;
+    }
 
     LuaTable::~LuaTable()
     {
@@ -150,7 +167,7 @@ namespace LuaWrapper
         }
     }
 
-    bool LuaTable::insert(const LuaEntity &key, const LuaEntity &value)
+    bool LuaTable::insert(const LuaEntity& key, const LuaEntity& value)
     {
         assertValidKey(key);
         if (find(key))
