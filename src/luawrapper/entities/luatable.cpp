@@ -9,6 +9,30 @@ using namespace std::string_literals;
 
 namespace LuaWrapper
 {
+    void assertValidKey(const LuaEntity& key)
+    {
+        if (!LuaTable::getAllowedKeyTypes().contains(key.getTypeId()))
+        {
+            throw LuaInvalidArgumentError(
+                "A key of type "s + key.getTypeId().getTypeName() + " may not be used."
+            );
+        }
+    }
+
+    void copyEntity(LuaTable::EntityMap& table, const LuaEntity& key, const LuaEntity& value)
+    {
+        LuaEntity* copiedKey   = LuaEntityFactory::makeLuaEntity(key);
+        LuaEntity* copiedValue = LuaEntityFactory::makeLuaEntity(value);
+        table[copiedKey] = copiedValue;
+    }
+
+    void moveEntity(LuaTable::EntityMap& table, const LuaEntity& key, const LuaEntity& value)
+    {
+        LuaEntity* movedKey   = LuaEntityFactory::makeLuaEntity(std::move(key));
+        LuaEntity* movedValue = LuaEntityFactory::makeLuaEntity(std::move(value));
+        table[movedKey] = movedValue;
+    }
+
     const std::unordered_set<LuaTypeId> LuaTable::allowedKeyTypes =
     {
         LuaTypeId::LightUserData, LuaTypeId::Number, LuaTypeId::String
@@ -21,13 +45,21 @@ namespace LuaWrapper
     LuaTable::LuaTable(const LuaTable& other) :
         LuaEntity(LuaTypeId::Table)
     {
-        throw LuaNotImplementedError("Not yet implemented: Copy CTOR for LuaTable");
+        for (const auto& [k, v] : other.table)
+        {
+            copyEntity(table, *k, *v);
+        }
     }
 
     LuaTable::LuaTable(LuaTable&& other) :
         LuaEntity(LuaTypeId::Table),
         table(std::move(other.table))
-    {}
+    {
+        for (const auto& [k, v] : other.table)
+        {
+            moveEntity(table, *k, *v);
+        }
+    }
 
     LuaTable& LuaTable::operator=(LuaTable&& other)
     {
@@ -44,54 +76,9 @@ namespace LuaWrapper
         }
     }
 
-    std::unordered_set<LuaTypeId> LuaTable::getAllowedKeyTypes()
-    {
-        return allowedKeyTypes;
-    }
-
-    bool LuaTable::operator==(const LuaTable& other) const
-    {
-        throw LuaNotImplementedError("Not implemented yet: compare equal tables");
-    }
-
     LuaTypeId LuaTable::getStaticTypeId()
     {
         return LuaTypeId::Table;
-    }
-
-    void LuaTable::pushToLua(lua_State* L) const
-    {
-        lua_newtable(L);
-
-        for (const auto& [k, v] : table)
-        {
-            k->pushToLua(L);
-            v->pushToLua(L);
-            lua_settable(L, -3);
-        }
-    }
-
-    void LuaTable::fetchFromLua(lua_State* L)
-    {
-        LuaTypeId tid;
-        LuaEntity* key;
-        LuaEntity* value;
-
-        lua_pushnil(L);             // lua_next will interpret this as "begin with first key"
-        while (lua_next(L, -2))     // pops key, pushes [value, next_key]; returns null if no next_key
-        {
-            tid = lua_type(L, -1);
-            value = LuaEntityFactory::makeLuaEntityFromTypeId(tid);
-            value->popFromLua(L);
-
-            tid = lua_type(L, -1);
-            key = LuaEntityFactory::makeLuaEntityFromTypeId(tid);
-            key->popFromLua(L);
-
-            table[key] = value;
-        }
-
-        // talbe is now on top of stack
     }
 
     bool LuaTable::isTable() const
@@ -99,30 +86,37 @@ namespace LuaWrapper
         return true;
     }
 
-    const LuaTable::EntityMap& LuaTable::getValue() const
+    const LuaTable::EntityMap& LuaTable::getEntityMap() const
     {
         return table;
     }
 
-    void LuaTable::setValue(const EntityMap& newValue)
+    LuaTable::EntitySet LuaTable::getKeySet() const
     {
-        table = newValue;
+        EntitySet result;
+        // TODO
+        // std::transform(table.begin(), table.end(),
+        //                std::inserter(result, result.end()),
+        //                [](std::pair<const LuaTable*, const LuaTable*>& item)
+        // {
+        //     return item.first;
+        // });
+
+        return result;
     }
 
-    std::string LuaTable::to_string() const
+    LuaTable::EntitySet LuaTable::getValueSet() const
     {
-        throw LuaNotImplementedError("Not implemented yet: table repr");
-
-        /* INTENDED OUTPUT:
-         * { TABLE:
-         *   key1 = value1
-         *   key2 = { TABLE:
-         *     key2.1 = value2.1
-         *     ...
-         *   }
-         * }
-         */
+        EntitySet result;
+        // TODO
+        return result;
     }
+
+    std::unordered_set<LuaTypeId> LuaTable::getAllowedKeyTypes()
+    {
+        return allowedKeyTypes;
+    }
+
     size_t LuaTable::size() const
     {
         return table.size();
@@ -157,16 +151,6 @@ namespace LuaWrapper
         return findInternal(key, table).second;
     }
 
-    void assertValidKey(const LuaEntity& key)
-    {
-        if (!LuaTable::getAllowedKeyTypes().contains(key.getTypeId()))
-        {
-            throw LuaInvalidArgumentError(
-                "A key of type "s + key.getTypeId().getTypeName() + " may not be used."
-            );
-        }
-    }
-
     bool LuaTable::insert(const LuaEntity& key, const LuaEntity& value)
     {
         assertValidKey(key);
@@ -174,11 +158,7 @@ namespace LuaWrapper
         {
             return false;
         }
-
-        LuaEntity* copiedKey   = LuaEntityFactory::makeLuaEntity(key);
-        LuaEntity* copiedValue = LuaEntityFactory::makeLuaEntity(value);
-        table[copiedKey] = copiedValue;
-
+        copyEntity(table, key, value);
         return true;
     }
 
@@ -189,12 +169,75 @@ namespace LuaWrapper
         {
             return false;
         }
-
-        LuaEntity* movedKey   = LuaEntityFactory::makeLuaEntity(std::move(key));
-        LuaEntity* movedValue = LuaEntityFactory::makeLuaEntity(std::move(value));
-        table[movedKey] = movedValue;
-
+        moveEntity(table, key, value);
         return true;
+    }
+
+    void LuaTable::update(const LuaEntity& key, const LuaEntity& value)
+    {
+        copyEntity(table, key, value);
+        assertValidKey(key);
+    }
+
+    void LuaTable::update(LuaEntity&& key, LuaEntity&& value)
+    {
+        moveEntity(table, key, value);
+        assertValidKey(key);
+    }
+
+    void LuaTable::pushToLua(lua_State* L) const
+    {
+        lua_newtable(L);
+
+        for (const auto& [k, v] : table)
+        {
+            k->pushToLua(L);
+            v->pushToLua(L);
+            lua_settable(L, -3);
+        }
+    }
+
+    void LuaTable::fetchFromLua(lua_State* L)
+    {
+        LuaTypeId tid;
+        LuaEntity* key;
+        LuaEntity* value;
+
+        lua_pushnil(L);             // lua_next will interpret this as "begin with first key"
+        while (lua_next(L, -2))     // pops key, pushes [value, next_key]; returns null if no next_key
+        {
+            tid = lua_type(L, -1);
+            value = LuaEntityFactory::makeLuaEntityFromTypeId(tid);
+            value->popFromLua(L);
+
+            tid = lua_type(L, -1);
+            key = LuaEntityFactory::makeLuaEntityFromTypeId(tid);
+            key->popFromLua(L);
+
+            table[key] = value;
+        }
+
+        // table is now on top of stack
+    }
+
+    std::string LuaTable::to_string() const
+    {
+        throw LuaNotImplementedError("Not implemented yet: table repr");
+
+        /* INTENDED OUTPUT:
+         * { TABLE:
+         *   key1 = value1
+         *   key2 = { TABLE:
+         *     key2.1 = value2.1
+         *     ...
+         *   }
+         * }
+         */
+    }
+
+    bool LuaTable::operator==(const LuaTable& other) const
+    {
+        throw LuaNotImplementedError("Not implemented yet: compare equal tables");
     }
 }
 
@@ -205,7 +248,7 @@ namespace std
         throw LuaWrapper::LuaNotImplementedError("Not yet implemented: computing hash for LuaTable");
 
         size_t result = 0;
-        for (const auto [k, v] : luaEntity.getValue())
+        for (const auto [k, v] : luaEntity.getEntityMap())
         {
             // order of entries irrelevant => sum of components is fine (commutivity of + is no issue here)
             // correlate key and value so that [{a->A}, {b->B}] and [{a->B}, {b->A}] are distinct.

@@ -8,6 +8,13 @@ using namespace std::string_literals;
 
 using namespace LuaWrapper;
 
+void funcPtr() {}
+
+void* getVoidPtr()
+{
+    return reinterpret_cast<void*>(funcPtr);
+}
+
 TEST(TypeSystemTest, getTypeId)
 {
     // setup
@@ -52,11 +59,21 @@ TEST(TypeSystemTest, DefaultAssignments)
     LuaLightUserData    lud;
     LuaNumber           number;
     LuaString           string;
-    LuaTable            table;
+    // TODO: LuaTable            table;
 
     // when
     nil = nullptr;
     boolean = false;
+    lud =  getVoidPtr();
+    number = 1;
+    string = "string";
+
+    // then
+    EXPECT_EQ(nil.getValue(), nullptr);
+    EXPECT_EQ(boolean.getValue(), false);
+    EXPECT_EQ(lud.getValue(), getVoidPtr());
+    EXPECT_EQ(number.getValue(), 1);
+    EXPECT_EQ(string.getValue(), "string"s);
 }
 
 TEST(TypeSystemTest, LuaTableMethods)
@@ -77,25 +94,23 @@ TEST(TypeSystemTest, LuaTableMethods)
 
     ASSERT_THROW(table.insert(boolean, table), LuaInvalidArgumentError);
 
-    ASSERT_THROW(table.insert(lud, table), LuaInvalidArgumentError);
-
     ASSERT_THROW(table.insert(table, table), LuaInvalidArgumentError);
 
     // allowed key types do not throw and return true on insert
+    EXPECT_TRUE(table.insert(lud, nil));
     EXPECT_TRUE(table.insert(number, number));
     EXPECT_TRUE(table.insert(string, other));
     EXPECT_FALSE(table.insert(string, string));
     EXPECT_TRUE(table.insert(other, string));
-    EXPECT_EQ(table.size(), 3);
+
+    EXPECT_EQ(table.size(), 4);
     EXPECT_EQ(*table.find(string), other);
 
-    for (const auto[keyPtr, valPtr] : table.getValue())
+    for (const auto[keyPtr, valPtr] : table.getEntityMap())
     {
         std::cout << keyPtr->to_string() << "\t" << valPtr->to_string() << std::endl;
     }
 }
-
-void funcPtr() {}
 
 const void* exposeCString(const LuaString& luaString)
 {
@@ -106,7 +121,7 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
 {
     // setup
     const int NAddedItems = 14;
-    const void* ptrLUD = reinterpret_cast<const void*>(funcPtr);
+    const void* ptrLUD = getVoidPtr();
 
     LuaNil              nil;
     LuaBoolean          lBoolean;
@@ -176,7 +191,7 @@ TEST(TypeSystemTest, ParameterStack_ImplicitConversion)
     {
         nullptr,
         true,
-        reinterpret_cast<const void*>(funcPtr),
+        getVoidPtr(),
         1,
         1.0,
         "char literal",

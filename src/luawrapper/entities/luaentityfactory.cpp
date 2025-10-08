@@ -225,6 +225,7 @@ namespace LuaWrapper
             case LuaTypeId::String:
                 return LuaEntityFactory::makeLuaEntity(value.asLuaString());
             case LuaTypeId::Table:
+                return LuaEntityFactory::makeLuaEntity(value.asLuaTable());
             case LuaTypeId::Function:
             case LuaTypeId::UserData:
             case LuaTypeId::Thread:
@@ -259,6 +260,7 @@ namespace LuaWrapper
             case LuaTypeId::String:
                 return LuaEntityFactory::makeLuaEntity(std::move(value.asLuaString()));
             case LuaTypeId::Table:
+                return LuaEntityFactory::makeLuaEntity(std::move(value.asLuaTable()));
             case LuaTypeId::Function:
             case LuaTypeId::UserData:
             case LuaTypeId::Thread:

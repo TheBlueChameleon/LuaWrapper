@@ -25,7 +25,7 @@ namespace LuaWrapper
             using value_type                = container::value_type;
             using pointer                   = container::pointer;
             using reference                 = container::reference;
-            using iterator_category         = std::random_access_iterator_tag;
+            using iterator_category         = iterator::iterator_category;
 
         private:
             std::deque<LuaEntity*> entities;

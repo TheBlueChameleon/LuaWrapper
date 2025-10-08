@@ -11,8 +11,21 @@ namespace LuaWrapper
     class LuaTable : public LuaEntity
     {
         public:
+            using EntitySet = std::unordered_set<LuaEntity*>;
             using EntityMap = std::unordered_map<LuaEntity*, LuaEntity*>;
             static const std::unordered_set<LuaTypeId> allowedKeyTypes;
+
+            // iterator types
+            using container                 = EntityMap;
+
+            using iterator                  = container::iterator;
+            using const_iterator            = container::const_iterator;
+
+            using difference_type           = container::difference_type;
+            using value_type                = container::value_type;
+            using pointer                   = container::pointer;
+            using reference                 = container::reference;
+            using iterator_category         = iterator::iterator_category;
 
         private:
             EntityMap table;
@@ -29,15 +42,13 @@ namespace LuaWrapper
 
             static LuaTypeId getStaticTypeId();
 
-            void pushToLua(lua_State* L) const;
-            void fetchFromLua(lua_State* L);
-
             bool isTable() const;
 
-            const EntityMap& getValue() const;
-            void setValue(const EntityMap& newValue);
+            const EntityMap& getEntityMap() const;
+            EntitySet getKeySet() const;
+            EntitySet getValueSet() const;
 
-            std::string to_string() const;
+            static std::unordered_set<LuaTypeId> getAllowedKeyTypes();
 
             size_t size() const;
             bool  empty() const;
@@ -51,11 +62,14 @@ namespace LuaWrapper
             void update(LuaEntity&& key, LuaEntity&& value);
 
             /* TODO
-             * Add update, delete, ...
+             * Add delete
              * Expose Iterator like in parameterstack
-             * remove _etValue?
              */
-            static std::unordered_set<LuaTypeId> getAllowedKeyTypes();
+
+            void pushToLua(lua_State* L) const;
+            void fetchFromLua(lua_State* L);
+
+            std::string to_string() const;
 
             bool operator==(const LuaTable& other) const;
     };
