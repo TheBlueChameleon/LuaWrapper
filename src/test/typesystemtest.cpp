@@ -106,6 +106,9 @@ TEST(TypeSystemTest, LuaTableMethods)
     EXPECT_EQ(table.size(), 4);
     EXPECT_EQ(*table.find(string), other);
 
+    table.erase(other);
+    EXPECT_EQ(table.size(), 3);
+
     for (const auto[keyPtr, valPtr] : table)
     {
         std::cout << keyPtr->to_string() << "\t" << valPtr->to_string() << std::endl;

@@ -40,8 +40,8 @@ FetchContent_MakeAvailable(googletest)
 # source file definitions
 
 include_directories(
-    src/
     src/luawrapper/
+    src/test/
     "${lua_SOURCE_DIR}/src"
 )
 
@@ -70,7 +70,6 @@ add_library(LuaWrapper-Lib STATIC
     src/luawrapper/state/state.hpp
     src/luawrapper/state/luastate.hpp               src/luawrapper/state/luastate.cpp
     src/luawrapper/state/parameterstack.hpp         src/luawrapper/state/parameterstack.cpp
-
 )
 
 target_link_libraries(LuaWrapper-Lib PUBLIC
@@ -86,8 +85,6 @@ add_executable(LuaWrapper-Test
     src/test/main.cpp
     src/test/typesystemtest.cpp
     src/test/statetest.cpp
-
-
 )
 
 target_link_libraries(LuaWrapper-Test

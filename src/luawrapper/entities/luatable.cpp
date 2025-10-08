@@ -69,11 +69,7 @@ namespace LuaWrapper
 
     LuaTable::~LuaTable()
     {
-        for (const auto& [k, v] : table)
-        {
-            delete k;
-            delete v;
-        }
+        clear();
     }
 
     LuaTypeId LuaTable::getStaticTypeId()
@@ -208,6 +204,31 @@ namespace LuaWrapper
     {
         moveEntity(table, key, value);
         assertValidKey(key);
+    }
+
+    void LuaTable::clear()
+    {
+        for (const auto& [k, v] : table)
+        {
+            delete k;
+            delete v;
+        }
+        table.clear();
+    }
+
+    bool LuaTable::erase(const LuaEntity& key)
+    {
+        std::pair<LuaEntity*, LuaEntity*> target = findInternal(key, table);
+        if (target.first == nullptr)
+        {
+            return false;
+        }
+
+        delete (target.first);
+        delete (target.second);
+        table.erase(target.first);
+
+        return true;
     }
 
     void LuaTable::pushToLua(lua_State* L) const

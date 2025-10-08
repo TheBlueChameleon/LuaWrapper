@@ -66,10 +66,8 @@ namespace LuaWrapper
             void update(const LuaEntity& key, const LuaEntity& value);
             void update(LuaEntity&& key, LuaEntity&& value);
 
-            /* TODO
-             * Add delete
-             * Expose Iterator like in parameterstack
-             */
+            void clear();
+            bool erase(const LuaEntity& key);
 
             void pushToLua(lua_State* L) const;
             void fetchFromLua(lua_State* L);
