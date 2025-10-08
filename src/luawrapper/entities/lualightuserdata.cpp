@@ -50,7 +50,7 @@ namespace LuaWrapper
 
     std::string LuaLightUserData::to_string() const
     {
-        return std::format("{}", value);
+        return std::format("LightUserData @ {}", value);
     }
 }
 

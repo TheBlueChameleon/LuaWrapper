@@ -324,15 +324,6 @@ namespace LuaWrapper
         }
         buffer << "}" << std::endl;
 
-        /* INTENDED OUTPUT:
-         * { TABLE:
-         *   key1 = value1
-         *   key2 = { TABLE:
-         *     key2.1 = value2.1
-         *     ...
-         *   }
-         * }
-         */
         return buffer.str();
     }
 }
