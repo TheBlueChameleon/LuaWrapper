@@ -55,6 +55,11 @@ namespace LuaWrapper
 
             LuaEntity* find(const LuaEntity& key) const;
 
+            iterator        begin();
+            const_iterator  begin() const;
+            iterator        end();
+            const_iterator  end() const;
+
             bool insert(const LuaEntity& key, const LuaEntity& value);
             bool insert(LuaEntity&& key, LuaEntity&& value);
 

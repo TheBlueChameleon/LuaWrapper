@@ -106,7 +106,7 @@ TEST(TypeSystemTest, LuaTableMethods)
     EXPECT_EQ(table.size(), 4);
     EXPECT_EQ(*table.find(string), other);
 
-    for (const auto[keyPtr, valPtr] : table.getEntityMap())
+    for (const auto[keyPtr, valPtr] : table)
     {
         std::cout << keyPtr->to_string() << "\t" << valPtr->to_string() << std::endl;
     }

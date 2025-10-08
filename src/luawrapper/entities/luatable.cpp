@@ -156,6 +156,26 @@ namespace LuaWrapper
         return findInternal(key, table).second;
     }
 
+    LuaTable::iterator LuaTable::begin()
+    {
+        return table.begin();
+    }
+
+    LuaTable::const_iterator LuaTable::begin() const
+    {
+        return table.cbegin();
+    }
+
+    LuaTable::iterator LuaTable::end()
+    {
+        return table.end();
+    }
+
+    LuaTable::const_iterator LuaTable::end() const
+    {
+        return table.cend();
+    }
+
     bool LuaTable::insert(const LuaEntity& key, const LuaEntity& value)
     {
         assertValidKey(key);
