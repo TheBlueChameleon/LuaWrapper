@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 using namespace std::string_literals;
 
@@ -9,7 +10,6 @@ using namespace std::string_literals;
 
 namespace LuaWrapper
 {
-
     lua_State* initLua(const std::filesystem::path& scriptFile)
     {
         lua_State* L = luaL_newstate();
@@ -35,39 +35,10 @@ namespace LuaWrapper
         return L;
     }
 
-    void scanForLuaGlobals(
-        lua_State* const L,
-        std::unordered_map<std::string, LuaTypeId>& globals,
-        std::unordered_map<std::string, LuaFunction>& functions
-    )
-    {
-        const char* name;
-        int         typeId;
-
-        lua_pushglobaltable(L);                 // stack = [table]
-        lua_pushnil(L);                         // stack = [nil, table]
-        while (lua_next(L, -2) != 0)            // stack = [<next value>, <next key>, table]
-        {
-            // lua_next implies lua_pop(L, 1) to get key
-
-            typeId = lua_type(L, -1);
-            name = lua_tostring(L, -2);     // Get key(-2)
-
-            globals.emplace(name, LuaTypeId(typeId));
-            if (typeId == LuaTypeId::Function)
-            {
-                functions.emplace(std::make_pair(name, lua_tocfunction(L, -1)));
-            }
-            lua_pop(L, 1);                      // stack = [<next key>, table]
-        }
-        // lua_next has exhausted table         => stack = [table]
-        lua_pop(L, 1);                          // stack = []
-    }
-
     LuaState::LuaState(const std::filesystem::path& scriptFile)
     {
         L = initLua(scriptFile);
-        scanForLuaGlobals(L, globalSymbols, functions);
+        synchronizeGlobalSymbols();
     }
 
     LuaState::~LuaState()
@@ -84,45 +55,73 @@ namespace LuaWrapper
         return lua_gettop(L);
     }
 
-    std::unordered_map<std::string, LuaTypeId> LuaState::getGlobalSymbols() const
+    void LuaState::synchronizeGlobalSymbols()
+    {
+        globalSymbols.clear();
+        functions.clear();
+
+        const char* name;
+        int         typeId;
+
+        lua_pushglobaltable(L);                 // stack = [table]
+        lua_pushnil(L);                         // stack = [nil, table]
+        while (lua_next(L, -2) != 0)            // stack = [<next value>, <next key>, table]
+        {
+            // lua_next implies lua_pop(L, 1) to get key
+
+            typeId = lua_type(L, -1);
+            name = lua_tostring(L, -2);     // Get key(-2)
+
+            globalSymbols[name] = LuaTypeId(typeId);
+            if (typeId == LuaTypeId::Function)
+            {
+                functions[name] = lua_tocfunction(L, -1);
+            }
+            lua_pop(L, 1);                      // stack = [<next key>, table]
+        }
+        // lua_next has exhausted table         => stack = [table]
+        lua_pop(L, 1);                          // stack = []
+    }
+
+    const std::unordered_map<std::string, LuaTypeId>& LuaState::getGlobalSymbols() const
     {
         return globalSymbols;
     }
 
+    const std::unordered_map<std::string, LuaFunction>& LuaState::getFunctions() const
+    {
+        return functions;
+    }
+
     bool LuaState::hasGlobalSymbol(const std::string& name) const
     {
-        return globalSymbols.find(name) != globalSymbols.end();
+        const LuaTypeId typeOnStack = lua_getglobal(L, name.c_str());
+        lua_pop(L, 1);
+        return typeOnStack != LuaTypeId::None;
     }
 
     LuaTypeId LuaState::getGlobalSymbolType(const std::string& name) const
     {
-        const auto it = globalSymbols.find(name);
-        if (it == globalSymbols.end())
-        {
-            return LuaTypeId::None;
-        }
-        else
-        {
-            return it->second;
-        }
+        const LuaTypeId typeOnStack = lua_getglobal(L, name.c_str());
+        lua_pop(L, 1);
+        return typeOnStack;
     }
 
     LuaEntity* LuaState::getGlobalEntity(const std::string& name) const
     {
-        const LuaTypeId type = getGlobalSymbolType(name);
+        const LuaTypeId type = lua_getglobal(L, name.c_str());
         if (type == LuaTypeId::None)
         {
             return nullptr;
         }
 
         LuaEntity* result = LuaEntityFactory::makeLuaEntityFromTypeId(type);
-        lua_getglobal(L, name.c_str());
         result->popFromLua(L);
 
         return result;
     }
 
-    void LuaState::syncWithGlobalSymbol(LuaEntity& target, const std::string& name) const
+    void LuaState::synchronizeWithGlobalSymbol(LuaEntity& target, const std::string& name) const
     {
         const LuaTypeId type = getGlobalSymbolType(name);
         if (type == LuaTypeId::None)
@@ -141,7 +140,17 @@ namespace LuaWrapper
             );
         }
 
-        lua_getglobal(L, name.c_str());
+        int typeOnStack = lua_getglobal(L, name.c_str());
+        if (typeOnStack != target.getTypeId())
+        {
+            throw LuaInvalidArgumentError(
+                "While synchronizing with global symbol: "s
+                "While synchronizing with global symbol: "s
+                "'" + name + "' is of type " + type.getTypeName() + " "
+                "while receiver is of type " + target.getTypeId().getTypeName()
+            );
+        }
+
         target.popFromLua(L);
     }
 

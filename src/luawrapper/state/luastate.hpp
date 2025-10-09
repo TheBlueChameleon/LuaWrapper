@@ -25,11 +25,19 @@ namespace LuaWrapper
 
             int getStackTopIndex() const;
 
-            std::unordered_map<std::string, LuaTypeId> getGlobalSymbols() const;
-            bool        hasGlobalSymbol(const std::string& name) const;
-            LuaTypeId   getGlobalSymbolType(const std::string& name) const;
-            LuaEntity*  getGlobalEntity(const std::string& name) const;
-            void        syncWithGlobalSymbol(LuaEntity& target, const std::string& name) const;
+            void synchronizeGlobalSymbols();
+
+            const std::unordered_map<std::string, LuaTypeId>& getGlobalSymbols() const;
+            const std::unordered_map<std::string, LuaFunction>& getFunctions() const;
+
+            bool            hasGlobalSymbol(const std::string& name) const;
+            LuaTypeId       getGlobalSymbolType(const std::string& name) const;
+            LuaEntity*      getGlobalEntity(const std::string& name) const;
+            void            synchronizeWithGlobalSymbol(LuaEntity& target, const std::string& name) const;
+
+            bool            hasFunction(const std::string& name) const;
+            LuaFunction&    getFunction(const std::string& name) const;
+            ParameterStack  invoke(const std::string& name, const ParameterStack& args) const;
 
             lua_State* expose() const;
     };

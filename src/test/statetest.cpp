@@ -86,7 +86,7 @@ TEST(StateTest, ExtractGlobalsTest)
     LuaTable more;
     ASSERT_TRUE(state.hasGlobalSymbol("more"));
     EXPECT_EQ(state.getGlobalSymbolType("more"), LuaTypeId::Table);
-    state.syncWithGlobalSymbol(more, "more");
+    state.synchronizeWithGlobalSymbol(more, "more");
     EXPECT_EQ(more.size(), 1);
     {
         tableEntry = more.find(LuaString("foo"));
@@ -94,6 +94,9 @@ TEST(StateTest, ExtractGlobalsTest)
         ASSERT_EQ(tableEntry->getTypeId(), LuaTypeId::Function);
         EXPECT_EQ(tableEntry->asLuaFunction().getValue(), luaFuncPtr);
     }
+
+    LuaNil nil;
+    state.synchronizeWithGlobalSymbol(nil, "doesNotExist");
 
     EXPECT_EQ(state.getStackTopIndex(), 0);
 }
