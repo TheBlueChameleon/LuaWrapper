@@ -3,20 +3,12 @@
 
 #include <string>
 
+#include "../util/luacapi.hpp"
+
+#include "luaentityforwarddeclarations.hpp"
+
 namespace LuaWrapper
 {
-    class LuaTypeId;
-    class LuaEntity;
-    class LuaTrivialType;
-
-    class LuaNil;
-    class LuaBoolean;
-    class LuaLightUserData;
-    class LuaNumber;
-    class LuaString;
-    class LuaTable;
-    class LuaFunction;
-
     class LuaEntityFactory
     {
         private:
@@ -33,7 +25,7 @@ namespace LuaWrapper
             static LuaEntity* makeLuaEntity(const char* const value);
             static LuaEntity* makeLuaEntity(const std::string& value);
             static LuaEntity* makeLuaEntity(std::string&& value);
-            // TODO make from lua_CFunction?
+            static LuaEntity* makeLuaEntity(const lua_CFunction value);
 
             static LuaEntity* makeLuaEntity(const LuaTrivialType& value);
             static LuaEntity* makeLuaEntity(LuaTrivialType&& value);

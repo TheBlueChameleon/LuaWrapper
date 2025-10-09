@@ -8,7 +8,7 @@ using namespace std::string_literals;
 
 using namespace LuaWrapper;
 
-void funcPtr() {}
+void funcPtr(lua_State*) {}
 
 void* getVoidPtr()
 {

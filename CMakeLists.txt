@@ -58,6 +58,7 @@ add_library(LuaWrapper-Lib STATIC
 
     src/luawrapper/entities/entities.hpp
     src/luawrapper/entities/concepts.hpp
+    src/luawrapper/entities/luaentityforwarddeclarations.hpp
     src/luawrapper/entities/luaentity.hpp           src/luawrapper/entities/luaentity.cpp
     src/luawrapper/entities/luaentityfactory.hpp    src/luawrapper/entities/luaentityfactory.cpp
     src/luawrapper/entities/luanil.hpp              src/luawrapper/entities/luanil.cpp

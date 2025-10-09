@@ -284,7 +284,7 @@ namespace LuaWrapper
 
             tid = lua_type(L, -1);
             key = LuaEntityFactory::makeLuaEntityFromTypeId(tid);
-            key->popFromLua(L);
+            key->fetchFromLua(L);       // sic: fetch, not pop -- keep current key on stack for next iteration
 
             table[key] = value;
         }

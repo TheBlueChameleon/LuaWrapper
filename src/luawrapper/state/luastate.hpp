@@ -5,24 +5,31 @@
 #include <list>
 #include <unordered_map>
 
+#include "../entities/luaentityforwarddeclarations.hpp"
 #include "../util/luautil.hpp"
 
 namespace LuaWrapper
 {
-    class LuaFunctionDescriptor;
     class ParameterStack;
 
     class LuaState
     {
         private:
             lua_State* L = nullptr;
-            std::unordered_map<std::string, LuaTypeId> globalSymbols;
+            std::unordered_map<std::string, LuaTypeId>   globalSymbols;
+            std::unordered_map<std::string, LuaFunction> functions;
 
         public:
             LuaState(const std::filesystem::path& scriptFile);
             ~LuaState();
 
+            int getStackTopIndex() const;
+
             std::unordered_map<std::string, LuaTypeId> getGlobalSymbols() const;
+            bool        hasGlobalSymbol(const std::string& name) const;
+            LuaTypeId   getGlobalSymbolType(const std::string& name) const;
+            LuaEntity*  getGlobalEntity(const std::string& name) const;
+            void        syncWithGlobalSymbol(LuaEntity& target, const std::string& name) const;
 
             lua_State* expose() const;
     };

@@ -11,6 +11,12 @@ namespace LuaWrapper
             using std::runtime_error::runtime_error;
     };
 
+    class LuaInitError : public LuaError
+    {
+        public:
+            using LuaError::LuaError;
+    };
+
     class LuaTypeError : public LuaError
     {
         public:

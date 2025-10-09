@@ -3,19 +3,12 @@
 
 #include <string>
 
+#include "luaentityforwarddeclarations.hpp"
 #include "../util/luacapi.hpp"
 #include "../util/luatypes.hpp"
 
 namespace LuaWrapper
 {
-    class LuaNil;
-    class LuaBoolean;
-    class LuaLightUserData;
-    class LuaNumber;
-    class LuaString;
-    class LuaTable;
-    class LuaFunction;
-
     class LuaEntity
     {
         protected:

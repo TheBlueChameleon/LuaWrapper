@@ -32,6 +32,7 @@ namespace LuaWrapper
             case LuaTypeId::Table:
                 return new LuaTable();
             case LuaTypeId::Function:
+                return new LuaFunction();
             case LuaTypeId::UserData:
             case LuaTypeId::Thread:
                 throw LuaNotImplementedError(
@@ -86,6 +87,11 @@ namespace LuaWrapper
     LuaEntity* LuaEntityFactory::makeLuaEntity(std::string&& value)
     {
         return new LuaString(std::move(value));
+    }
+
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const lua_CFunction value)
+    {
+        return new LuaFunction(value);
     }
 
     // ...................................................................... //
