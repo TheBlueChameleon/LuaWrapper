@@ -35,6 +35,12 @@ namespace LuaWrapper
             using LuaError::LuaError;
     };
 
+    class LuaCallError : public LuaError
+    {
+        public:
+            using LuaError::LuaError;
+    };
+
     class LuaNotImplementedError : public LuaError
     {
         public:

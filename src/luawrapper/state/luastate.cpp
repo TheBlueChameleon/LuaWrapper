@@ -175,6 +175,11 @@ namespace LuaWrapper
 
     ParameterStack LuaState::invoke(const std::string& name, const ParameterStack& args) const
     {
+        return invokeLuaFunction(L, name.c_str(), args);
+    }
+
+    void LuaState::registerFunction(const std::string& name, const lua_CFunction funcPtr)
+    {
 
     }
 

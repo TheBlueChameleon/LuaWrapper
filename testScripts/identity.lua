@@ -1,5 +1,7 @@
 function identity(n)
-    print(n)
-    return(n)
+    return n
 end
 
+function multiVariate(x, y)
+    return x - y, x + y
+end

@@ -1,5 +1,6 @@
-#include <iostream>
+#include <string>
 #include <format>
+using namespace std::string_literals;
 
 #include "luafunction.hpp"
 #include "../state/parameterstack.hpp"
@@ -39,30 +40,16 @@ namespace LuaWrapper
 
     ParameterStack LuaFunction::invoke(lua_State* const L, const ParameterStack& args)
     {
-        if (pseudoFuncPtr == nullptr || name.empty())
+        if (name.empty())
         {
-            throw LuaInvalidStateError("Function has not been configured");
+            throw LuaInvalidArgumentError("Function has not been configured");
+        }
+        if (pseudoFuncPtr == nullptr)
+        {
+            throw LuaInvalidArgumentError("Function '"s + name + "' has not been configured");
         }
 
-        lua_getglobal(L, name.c_str());
-        if (lua_type(L, -1) != LuaTypeId::Function)
-        {
-            if (lua_type(L, -1) != LuaTypeId::None)
-            {
-                lua_pop(L, 1);
-            }
-
-            throw LuaInvalidArgumentError(
-                "The function '" + name + "' is not known to Lua"
-            );
-        }
-
-        args.pushToLua(L);
-        lua_pcall(L, args.size(), LUA_MULTRET, 0);
-        ParameterStack result;
-        result.popFromLua(L);
-
-        return result;
+        return invokeLuaFunction(L, name.c_str(), args);
     }
 
     bool LuaFunction::operator==(const LuaFunction& other) const

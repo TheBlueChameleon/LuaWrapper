@@ -38,7 +38,7 @@ namespace LuaWrapper
 
             bool            hasFunction(const std::string& name) const;
             LuaFunction     getFunction(const std::string& name) const;
-            ParameterStack  invoke(const std::string& name, const ParameterStack& args) const;      // todo
+            ParameterStack  invoke(const std::string& name, const ParameterStack& args) const;
             void            registerFunction(const std::string& name, const lua_CFunction funcPtr); // todo
 
             lua_State* expose() const;

@@ -48,8 +48,8 @@ namespace LuaWrapper
                 break;
             }
 
-            entities.push_back(LuaEntityFactory::makeLuaEntityFromTypeId(lua_type(L, -1)));
-            entities.back()->popFromLua(L);
+            entities.push_front(LuaEntityFactory::makeLuaEntityFromTypeId(lua_type(L, -1)));
+            entities.front()->popFromLua(L);
 
             --nArgs;
         }

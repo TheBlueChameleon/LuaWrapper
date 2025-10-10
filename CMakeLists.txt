@@ -55,6 +55,7 @@ add_library(LuaWrapper-Lib STATIC
     src/luawrapper/util/luacapi.hpp
     src/luawrapper/util/luatypes.hpp                src/luawrapper/util/luatypes.cpp
     src/luawrapper/util/luaerror.hpp                src/luawrapper/util/luaerror.cpp
+    src/luawrapper/util/luainvoke.hpp               src/luawrapper/util/luainvoke.cpp
 
     src/luawrapper/entities/entities.hpp
     src/luawrapper/entities/concepts.hpp
@@ -85,6 +86,7 @@ include(GoogleTest)
 
 add_executable(LuaWrapper-Test
     src/test/main.cpp
+    src/test/commonconversionutil.hpp               src/test/commonconversionutil.cpp
     src/test/typesystemtest.cpp
     src/test/statetest.cpp
     src/test/tabletest.cpp

@@ -6,19 +6,9 @@ using namespace std::string_literals;
 
 #include <luawrapper.hpp>
 
+#include "commonconversionutil.hpp"
+
 using namespace LuaWrapper;
-
-static void funcPtr(lua_State*) {}
-
-void* getVoidPtr()
-{
-    return reinterpret_cast<void*>(funcPtr);
-}
-
-const void* exposeCString(const LuaString& luaString)
-{
-    return reinterpret_cast<const void*>(luaString.c_str());
-}
 
 TEST(TypeSystemTest, getTypeId)
 {
