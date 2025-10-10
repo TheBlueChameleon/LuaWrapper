@@ -17,25 +17,18 @@ TEST(EchoTest, PathologicCallsTest)
     auto state = LuaState(testDir + "identity.lua"s);
     lua_State* sPtr = state.expose();
 
-    {
-        ParameterStack ps = {1};
-        ASSERT_THROW(LuaFunction(""s, funcPtr).invoke(sPtr, ps), LuaInvalidArgumentError);
+    // nameless function
+    ASSERT_THROW(LuaFunction(""s, funcPtr).invoke(sPtr, {1}), LuaInvalidArgumentError);
 
-    }
-    {
-        ParameterStack ps = {1};
-        ASSERT_THROW(LuaFunction("doesNotExist"s, nullptr).invoke(sPtr, ps), LuaInvalidArgumentError);
+    // null function
+    ASSERT_THROW(LuaFunction("nullptr"s, nullptr).invoke(sPtr, {1}), LuaInvalidArgumentError);
 
-    }
-    {
-        ParameterStack ps = {1};
-        ASSERT_THROW(LuaFunction("doesNotExist"s, funcPtr).invoke(sPtr, ps), LuaInvalidStateError);
+    // nonexistent function
+    ASSERT_THROW(LuaFunction("doesNotExist"s, funcPtr).invoke(sPtr, {1}), LuaInvalidStateError);
 
-    }
-    {
-        ASSERT_THROW(state.invoke("multiVariate", ParameterStack()), LuaCallError);
+    // incompatible signature
+    ASSERT_THROW(state.invoke("multiVariate", ParameterStack()), LuaCallError);
 
-    }
 }
 
 TEST(EchoTest, InvokeRawTest)
@@ -43,56 +36,43 @@ TEST(EchoTest, InvokeRawTest)
     auto state = LuaState(testDir + "identity.lua"s);
     lua_State* sPtr = state.expose();
     LuaFunction f = state.getFunction("identity");
-    {
-        ParameterStack ps = {nullptr};
-        ParameterStack result = f.invoke(sPtr, ps);
+    ParameterStack result;
 
-        ASSERT_EQ(result.size(), 1);
-        ASSERT_EQ(result.at(0)->getTypeId(), LuaTypeId::Nil);
-    }
-    {
-        ParameterStack ps = {true};
-        ParameterStack result = f.invoke(sPtr, ps);
+    result = f.invoke(sPtr, {nullptr});
+    ASSERT_EQ(result.size(), 1);
+    ASSERT_EQ(result.at(0)->getTypeId(), LuaTypeId::Nil);
 
-        ASSERT_EQ(result.size(), 1);
-        ASSERT_EQ(result.at(0)->getTypeId(), LuaTypeId::Boolean);
-        EXPECT_EQ(result.at(0)->asLuaBoolean().getValue(), true);
-    }
-    {
-        ParameterStack ps = {getVoidPtr()};
-        ParameterStack result = f.invoke(sPtr, ps);
+    result = f.invoke(sPtr, {true});
+    ASSERT_EQ(result.size(), 1);
+    ASSERT_EQ(result.at(0)->getTypeId(), LuaTypeId::Boolean);
+    EXPECT_EQ(result.at(0)->asLuaBoolean().getValue(), true);
 
-        ASSERT_EQ(result.size(), 1);
-        ASSERT_EQ(result.at(0)->getTypeId(), LuaTypeId::LightUserData);
-        EXPECT_EQ(result.at(0)->asLuaLightUserData().getValue(), funcPtr);
-    }
-    {
-        ParameterStack ps = {1};
-        ParameterStack result = f.invoke(sPtr, ps);
+    result = f.invoke(sPtr, {getVoidPtr()});
+    ASSERT_EQ(result.size(), 1);
+    ASSERT_EQ(result.at(0)->getTypeId(), LuaTypeId::LightUserData);
+    EXPECT_EQ(result.at(0)->asLuaLightUserData().getValue(), funcPtr);
 
-        ASSERT_EQ(result.size(), 1);
-        ASSERT_EQ(result.at(0)->getTypeId(), LuaTypeId::Number);
-        EXPECT_EQ(result.at(0)->asLuaNumber().getValue(), 1);
-    }
-    {
-        ParameterStack ps = {"text"s};
-        ParameterStack result = f.invoke(sPtr, ps);
+    result = f.invoke(sPtr, {1});
+    ASSERT_EQ(result.size(), 1);
+    ASSERT_EQ(result.at(0)->getTypeId(), LuaTypeId::Number);
+    EXPECT_EQ(result.at(0)->asLuaNumber().getValue(), 1);
 
-        ASSERT_EQ(result.size(), 1);
-        ASSERT_EQ(result.at(0)->getTypeId(), LuaTypeId::String);
-        EXPECT_EQ(result.at(0)->asLuaString().getValue(), "text");
-    }
+    result = f.invoke(sPtr, {"text"s});
+    ASSERT_EQ(result.size(), 1);
+    ASSERT_EQ(result.at(0)->getTypeId(), LuaTypeId::String);
+    EXPECT_EQ(result.at(0)->asLuaString().getValue(), "text");
 }
 
 TEST(EchoTest, InvokeMultiVariateTest)
 {
     auto state = LuaState(testDir + "identity.lua"s);
-    {
-        ParameterStack result = state.invoke("multiVariate", ParameterStack({1, 2}));
-        ASSERT_EQ(result.size(), 2);
-        ASSERT_EQ(result.at(0)->getTypeId(), LuaTypeId::Number);
-        ASSERT_EQ(result.at(1)->getTypeId(), LuaTypeId::Number);
-        EXPECT_EQ(result.at(0)->asLuaNumber().getValue(), -1);
-        EXPECT_EQ(result.at(1)->asLuaNumber().getValue(), +3);
-    }
+    ParameterStack result;
+
+    result = state.invoke("multiVariate", {1, 2});
+    ASSERT_EQ(result.size(), 2);
+    ASSERT_EQ(result.at(0)->getTypeId(), LuaTypeId::Number);
+    ASSERT_EQ(result.at(1)->getTypeId(), LuaTypeId::Number);
+    EXPECT_EQ(result.at(0)->asLuaNumber().getValue(), -1);
+    EXPECT_EQ(result.at(1)->asLuaNumber().getValue(), +3);
 }
+

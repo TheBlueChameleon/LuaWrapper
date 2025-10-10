@@ -24,10 +24,27 @@ namespace LuaWrapper
 
     ParameterStack::~ParameterStack()
     {
-        for (auto* ptr : entities)
+        clear();
+    }
+
+    ParameterStack& ParameterStack::operator=(const ParameterStack& other)
+    {
+        clear();
+        for (const LuaEntity* value : other)
         {
-            delete ptr;
+            entities.push_back(LuaEntityFactory::makeLuaEntity(*value));
         }
+        return *this;
+    }
+
+    ParameterStack& ParameterStack::operator=(ParameterStack&& other)
+    {
+        clear();
+        for (const LuaEntity* value : other)
+        {
+            entities.push_back(LuaEntityFactory::makeLuaEntity(std::move(*value)));
+        }
+        return *this;
     }
 
     void ParameterStack::pushToLua(lua_State* L) const
@@ -53,6 +70,15 @@ namespace LuaWrapper
 
             --nArgs;
         }
+    }
+
+    void ParameterStack::clear()
+    {
+        for (auto* ptr : entities)
+        {
+            delete ptr;
+        }
+        entities.clear();
     }
 
     ParameterStack& ParameterStack::addEntity(const LuaEntity& entity)

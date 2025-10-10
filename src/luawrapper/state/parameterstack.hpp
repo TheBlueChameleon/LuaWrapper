@@ -36,8 +36,16 @@ namespace LuaWrapper
             ParameterStack(const std::initializer_list<LuaWrappableType>& items);
             ~ParameterStack();
 
+            ParameterStack(const ParameterStack& other) = default;
+            ParameterStack(ParameterStack&& other) = default;
+
+            ParameterStack& operator=(const ParameterStack& other);
+            ParameterStack& operator=(ParameterStack&& other);
+
             void pushToLua(lua_State* L) const;
-            void popFromLua(lua_State* L, int nArgs = -1);       // todo
+            void popFromLua(lua_State* L, int nArgs = -1);
+
+            void clear();
 
             ParameterStack& addEntity(const LuaEntity& entity);
             ParameterStack& addEntity(LuaEntity&& entity);

@@ -51,50 +51,30 @@ TEST(TypeSystemTest, getTypeId)
     EXPECT_TRUE(function.isFunction());
 }
 
-TEST(TypeSystemTest, DefaultAssignments)
+TEST(TypeSystemTest, Assignments)
 {
-    // setup
-    LuaNil              nil;
-    LuaBoolean          boolean;
-    LuaLightUserData    lud;
-    LuaNumber           number;
-    LuaString           string;
+    // CTOR assignments
+    LuaNil              nil     = nullptr;
+    LuaBoolean          boolean = false;
+    LuaLightUserData    lud     = getVoidPtr();
+    LuaNumber           number  = 1;
+    LuaString           string  = "string";
     // TODO: LuaTable            table;
 
-    // when
-    nil = nullptr;
-    boolean = false;
-    lud =  getVoidPtr();
-    number = 1;
-    string = "string";
-
-    // then
     EXPECT_EQ(nil.getValue(), nullptr);
     EXPECT_EQ(boolean.getValue(), false);
     EXPECT_EQ(lud.getValue(), getVoidPtr());
     EXPECT_EQ(number.getValue(), 1);
     EXPECT_EQ(string.getValue(), "string"s);
-}
 
-TEST(TypeSystemTest, ParameterStack_ImplicitConversion)
-{
-    // when
-    ParameterStack ps =
-    {
-        nullptr,
-        true,
-        getVoidPtr(),
-        1,
-        1.0,
-        "char literal",
-        "string literal"s
-    };
+    // convert/move assignments
+    boolean = true;
+    lud = nullptr;
+    number = 2;
+    string = "text";
 
-    // then
-    ASSERT_EQ(ps.empty(), false);
-    for (const auto& param : ps)
-    {
-        ASSERT_NE(param->getTypeId(), LuaTypeId::None);
-        // std::cout << param->to_string() << std::endl;
-    }
+    EXPECT_EQ(boolean.getValue(), true);
+    EXPECT_EQ(lud.getValue(), nullptr);
+    EXPECT_EQ(number.getValue(), 2);
+    EXPECT_EQ(string.getValue(), "text"s);
 }

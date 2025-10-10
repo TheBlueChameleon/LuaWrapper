@@ -10,7 +10,7 @@ using namespace std::string_literals;
 
 using namespace LuaWrapper;
 
-TEST(ParamStackTest, ParameterStack_BuilderInterface)
+TEST(ParameterStackTest, ParameterStack_BuilderInterface)
 {
     // setup
     const int NAddedItems = 14;
@@ -75,4 +75,27 @@ TEST(ParamStackTest, ParameterStack_BuilderInterface)
 
     ASSERT_NO_THROW(ps.at(0)->getTypeId());
 
+}
+
+TEST(ParameterStackTest, ParameterStack_ImplicitConversion)
+{
+    // when
+    ParameterStack ps =
+    {
+        nullptr,
+        true,
+        getVoidPtr(),
+        1,
+        1.0,
+        "char literal",
+        "string literal"s
+    };
+
+    // then
+    ASSERT_EQ(ps.empty(), false);
+    for (const auto& param : ps)
+    {
+        ASSERT_NE(param->getTypeId(), LuaTypeId::None);
+        // std::cout << param->to_string() << std::endl;
+    }
 }
