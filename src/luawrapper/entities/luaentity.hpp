@@ -13,6 +13,8 @@ namespace LuaWrapper
     {
         protected:
             LuaTypeId typeId;
+            // TODO: provide void* data; make re-assignable to different type
+            // alternative: provide union {nil, bool, lud, ..., tableMap*} ?
 
             LuaEntity(const LuaTypeId);
 

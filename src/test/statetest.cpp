@@ -100,3 +100,25 @@ TEST(StateTest, ExtractGlobalsTest)
 
     EXPECT_EQ(state.getStackTopIndex(), 0);
 }
+
+TEST(StateTest, SetGlobalsTest)
+{
+    auto state = LuaState(testDir + "globals.lua"s);
+    const auto pi = 3.141592654;
+    const auto variableName = "nmbr";
+
+    ASSERT_TRUE(state.hasGlobalSymbol(variableName));
+    EXPECT_EQ(state.getGlobalSymbolType(variableName), LuaTypeId::Number);
+
+    LuaNumber number;
+    state.synchronizeWithGlobalSymbol(number, variableName);
+    ASSERT_EQ(number.getValue(), 0);
+
+    number.setValue(pi);
+
+    state.setGlobalEntity(variableName, number);
+
+    state.synchronizeWithGlobalSymbol(number, variableName);
+
+    EXPECT_EQ(number.getValue(), pi);
+}

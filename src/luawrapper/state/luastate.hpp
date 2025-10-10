@@ -34,7 +34,7 @@ namespace LuaWrapper
             LuaTypeId       getGlobalSymbolType(const std::string& name) const;
             LuaEntity*      getGlobalEntity(const std::string& name) const;
             void            synchronizeWithGlobalSymbol(LuaEntity& target, const std::string& name) const;
-            void            setGlobalEntity(const std::string& name, const LuaEntity& value);       // todo
+            void            setGlobalEntity(const std::string& name, const LuaEntity& value);
 
             bool            hasFunction(const std::string& name) const;
             LuaFunction     getFunction(const std::string& name) const;

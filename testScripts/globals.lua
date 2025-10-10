@@ -9,6 +9,7 @@ data = {
 }
 
 function func()
+    return nmbr
 end
 
 more = {["foo"] = func}

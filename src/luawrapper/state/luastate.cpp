@@ -141,6 +141,17 @@ namespace LuaWrapper
         target.popFromLua(L);
     }
 
+    void LuaState::setGlobalEntity(const std::string& name, const LuaEntity& value)
+    {
+        if (name.empty())
+        {
+            throw LuaInvalidArgumentError("Cannot create global variable with null name");
+        }
+
+        value.pushToLua(L);
+        lua_setglobal(L, name.c_str());
+    }
+
     bool LuaState::hasFunction(const std::string& name) const
     {
         const LuaTypeId typeOnStack = lua_getglobal(L, name.c_str());
