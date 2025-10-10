@@ -91,6 +91,7 @@ add_executable(LuaWrapper-Test
     src/test/statetest.cpp
     src/test/tabletest.cpp
     src/test/echotest.cpp
+    src/test/parameterstacktest.cpp
 )
 
 target_link_libraries(LuaWrapper-Test
