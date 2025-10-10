@@ -1,4 +1,3 @@
-#include <iostream>
 #include <string>
 using namespace std::string_literals;
 
@@ -63,7 +62,6 @@ namespace LuaWrapper
 
     ParameterStack& ParameterStack::addEntity(LuaEntity&& entity)
     {
-        std::cout << "move into ps" << std::endl;
         entities.push_back(LuaEntityFactory::makeLuaEntity(std::move(entity)));
         return *this;
     }

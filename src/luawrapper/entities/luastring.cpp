@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "luastring.hpp"
 
 namespace LuaWrapper
@@ -8,14 +6,8 @@ namespace LuaWrapper
         LuaString("")
     {}
 
-    LuaString::LuaString(LuaString&& other) :
-        LuaString(std::move(other.value.getAsString()))
-    {
-        std::cout << "move LuaString" << std::endl;
-    }
-
     LuaString::LuaString(const char* value) :
-        LuaEntity(LuaTypeId::String, value)
+        LuaEntity(LuaTypeId::String, std::string(value))
     {}
 
     LuaString::LuaString(const std::string& value) :
@@ -23,10 +15,20 @@ namespace LuaWrapper
     {}
 
     LuaString::LuaString(std::string&& value) :
-        LuaEntity(LuaTypeId::String, std::move(value))
+        LuaEntity(LuaTypeId::String)
     {
-        std::cout << "move StdString" << std::endl;
+        /* TODO:
+         * sic: construct in body.
+         * LuaEntity has no convert/move CTOR for LuaWrappableType&&
+         * adding this causes weird crashes
+         * This does the job for the time being.
+         */
+        this->value = std::move(value);
     }
+
+    LuaString::LuaString(LuaString&& other) :
+        LuaString(std::get<std::string>(std::move(other.value)))
+    {}
 
     LuaTypeId LuaString::getStaticTypeId()
     {

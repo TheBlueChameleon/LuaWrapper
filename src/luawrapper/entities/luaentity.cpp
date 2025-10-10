@@ -14,7 +14,7 @@ namespace LuaWrapper
         value(nullptr)
     {}
 
-    LuaEntity::LuaEntity(const LuaTypeId typeId, const LuaWrappableType value) :
+    LuaEntity::LuaEntity(const LuaTypeId typeId, const LuaWrappableType& value) :
         typeId(typeId),
         value(value)
     {}

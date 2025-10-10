@@ -111,12 +111,8 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
     /*  6 */ .addEntity(lNumber)
     /*  7 */ .addEntity(tNumberD)
     /*  8 */ .addEntity(tNumberI)
-    /*  9 */ .addEntity(lcString);
-    std::cout << "### MARKER" << std::endl;
-    ps
-    /* 10 */ .addEntity(std::move(lmString));
-    std::cout << "### DONE" << std::endl;
-    ps
+    /*  9 */ .addEntity(lcString)
+    /* 10 */ .addEntity(std::move(lmString))
     /* 11 */ .addEntity(tlString)
     /* 12 */ .addEntity(tscString)
     /* 13 */ .addEntity(std::move(tsmString))
@@ -126,8 +122,6 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
     const auto newInst = ps.at(10)->asLuaString().c_str();
 
     // then
-    std::cout << lmString.to_string() << std::endl;
-    std::cout << ps.at(10)->to_string() << std::endl;
     EXPECT_EQ(preMove, newInst);
 
     ASSERT_FALSE(ps.empty());

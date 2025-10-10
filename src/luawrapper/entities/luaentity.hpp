@@ -14,11 +14,9 @@ namespace LuaWrapper
         protected:
             LuaTypeId typeId;
             LuaWrappableType value;
-            // TODO: provide void* data; make re-assignable to different type
-            // alternative: provide union {nil, bool, lud, ..., tableMap*} ?
 
             LuaEntity(const LuaTypeId);
-            LuaEntity(const LuaTypeId, const LuaWrappableType);
+            LuaEntity(const LuaTypeId, const LuaWrappableType&);
 
         public:
             virtual ~LuaEntity();

@@ -1,4 +1,3 @@
-#include <iostream>
 #include <string>
 using namespace std::string_literals;
 
@@ -200,7 +199,6 @@ namespace LuaWrapper
 
     LuaEntity* LuaEntityFactory::makeLuaEntity(LuaString&& value)
     {
-        std::cout << "factory move LuaString" << std::endl;
         return new LuaString(std::move(value));
     }
 
@@ -262,7 +260,6 @@ namespace LuaWrapper
 
     LuaEntity* LuaEntityFactory::makeLuaEntity(LuaEntity&& value)
     {
-        std::cout << "move into factory distributor" << std::endl;
         switch (value.getTypeId())
         {
             case LuaTypeId::None:
