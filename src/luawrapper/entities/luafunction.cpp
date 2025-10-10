@@ -1,3 +1,4 @@
+#include <iostream>
 #include <format>
 
 #include "luafunction.hpp"
@@ -7,12 +8,13 @@
 namespace LuaWrapper
 {
     LuaFunction::LuaFunction() :
-        LuaFunction(nullptr)
+        LuaFunction("", nullptr)
     {}
 
-    LuaFunction::LuaFunction(const lua_CFunction value) :
+    LuaFunction::LuaFunction(const std::string& name, const lua_CFunction value) :
         LuaEntity(LuaTypeId::Function),
-        value(value)
+        name(name),
+        pseudoFuncPtr(value)
     {}
 
     LuaTypeId LuaFunction::getStaticTypeId()
@@ -25,39 +27,62 @@ namespace LuaWrapper
         return true;
     }
 
-    lua_CFunction LuaFunction::getValue() const
+    const std::string& LuaFunction::getName() const
     {
-        return value;
+        return name;
     }
 
-    void LuaFunction::setValue(lua_CFunction newValue)
+    lua_CFunction LuaFunction::getPseudoFuncPtr() const
     {
-        value = newValue;
+        return pseudoFuncPtr;
     }
 
     ParameterStack LuaFunction::invoke(lua_State* const L, const ParameterStack& args)
     {
-        throw LuaNotImplementedError("Not implemented: LuaFunction::invoke");
+        if (pseudoFuncPtr == nullptr || name.empty())
+        {
+            throw LuaInvalidStateError("Function has not been configured");
+        }
+
+        lua_getglobal(L, name.c_str());
+        if (lua_type(L, -1) != LuaTypeId::Function)
+        {
+            if (lua_type(L, -1) != LuaTypeId::None)
+            {
+                lua_pop(L, 1);
+            }
+
+            throw LuaInvalidArgumentError(
+                "The function '" + name + "' is not known to Lua"
+            );
+        }
+
+        args.pushToLua(L);
+        lua_pcall(L, args.size(), LUA_MULTRET, 0);
+        ParameterStack result;
+        result.popFromLua(L);
+
+        return result;
     }
 
     bool LuaFunction::operator==(const LuaFunction& other) const
     {
-        return value == other.value;
+        return pseudoFuncPtr == other.pseudoFuncPtr;
     }
 
     void LuaFunction::pushToLua(lua_State* L) const
     {
-        lua_pushcfunction(L, value);
+        lua_pushcfunction(L, pseudoFuncPtr);
     }
 
     void LuaFunction::fetchFromLua(lua_State* L)
     {
-        value = reinterpret_cast<lua_CFunction>(lua_topointer(L, -1));
+        pseudoFuncPtr = reinterpret_cast<lua_CFunction>(lua_topointer(L, -1));
     }
 
     std::string LuaFunction::to_string() const
     {
-        return std::format("Function @ {}", reinterpret_cast<void*>(value));
+        return std::format("Function @ {}", reinterpret_cast<void*>(pseudoFuncPtr));
     }
 }
 
@@ -66,7 +91,7 @@ namespace std
     std::size_t std::hash<LuaWrapper::LuaFunction>::operator()(const LuaWrapper::LuaFunction& luaEntity) const
     {
         return std::hash<const void*>()(
-                   reinterpret_cast<const void*>(luaEntity.getValue())
+                   reinterpret_cast<const void*>(luaEntity.getPseudoFuncPtr())
                );
     }
 }

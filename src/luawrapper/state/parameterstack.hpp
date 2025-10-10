@@ -37,6 +37,7 @@ namespace LuaWrapper
             ~ParameterStack();
 
             void pushToLua(lua_State* L) const;
+            void popFromLua(lua_State* L, int nArgs = -1);       // todo
 
             ParameterStack& addEntity(const LuaEntity& entity);
             ParameterStack& addEntity(LuaEntity&& entity);

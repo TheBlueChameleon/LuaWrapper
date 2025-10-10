@@ -1,8 +1,8 @@
-#include <iostream>
 #include <string>
 using namespace std::string_literals;
 
-#include "luastate.hpp"
+#include "state.hpp"
+
 #include "../entities/luaentity.hpp"
 #include "../entities/luaentityfactory.hpp"
 #include "../entities/luafunction.hpp"
@@ -75,7 +75,7 @@ namespace LuaWrapper
             globalSymbols[name] = LuaTypeId(typeId);
             if (typeId == LuaTypeId::Function)
             {
-                functions[name] = lua_tocfunction(L, -1);
+                functions[name] = LuaFunction(std::string(name), lua_tocfunction(L, -1));
             }
             lua_pop(L, 1);                      // stack = [<next key>, table]
         }
@@ -123,35 +123,59 @@ namespace LuaWrapper
 
     void LuaState::synchronizeWithGlobalSymbol(LuaEntity& target, const std::string& name) const
     {
-        const LuaTypeId type = getGlobalSymbolType(name);
-        if (type == LuaTypeId::None)
-        {
-            throw LuaInvalidArgumentError(
-                "A global symbol with name "s + name + "does not exist"
-            );
-        }
-
-        if (target.getTypeId() != type)
-        {
-            throw LuaInvalidArgumentError(
-                "While synchronizing with global symbol: "s
-                "'" + name + "' is of type " + type.getTypeName() + " "
-                "while receiver is of type " + target.getTypeId().getTypeName()
-            );
-        }
-
-        int typeOnStack = lua_getglobal(L, name.c_str());
+        LuaTypeId typeOnStack = lua_getglobal(L, name.c_str());
         if (typeOnStack != target.getTypeId())
         {
+            if (typeOnStack != LuaTypeId::None)
+            {
+                lua_pop(L, 1);
+            }
+
             throw LuaInvalidArgumentError(
                 "While synchronizing with global symbol: "s
-                "While synchronizing with global symbol: "s
-                "'" + name + "' is of type " + type.getTypeName() + " "
+                "'" + name + "' is of type " + typeOnStack.getTypeName() + " "
                 "while receiver is of type " + target.getTypeId().getTypeName()
             );
         }
 
         target.popFromLua(L);
+    }
+
+    bool LuaState::hasFunction(const std::string& name) const
+    {
+        const LuaTypeId typeOnStack = lua_getglobal(L, name.c_str());
+        if (typeOnStack != LuaTypeId::None)
+        {
+            lua_pop(L, 1);
+        }
+        return typeOnStack == LuaTypeId::Function;
+    }
+
+    LuaWrapper::LuaFunction LuaState::getFunction(const std::string& name) const
+    {
+        const LuaTypeId typeOnStack = lua_getglobal(L, name.c_str());
+
+        if (typeOnStack != LuaTypeId::Function)
+        {
+            if (typeOnStack != LuaTypeId::None)
+            {
+                lua_pop(L, 1);
+            }
+
+            throw LuaInvalidArgumentError(
+                "While getting function: "s
+                "'" + name + "' is of type " + typeOnStack.getTypeName() + "."
+            );
+        }
+
+        lua_CFunction ptr = reinterpret_cast<lua_CFunction>(lua_topointer(L, -1));
+        lua_pop(L, 1);
+        return LuaFunction(name, ptr);
+    }
+
+    ParameterStack LuaState::invoke(const std::string& name, const ParameterStack& args) const
+    {
+
     }
 
     lua_State* LuaState::expose() const

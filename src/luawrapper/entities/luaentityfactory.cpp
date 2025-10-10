@@ -89,9 +89,9 @@ namespace LuaWrapper
         return new LuaString(std::move(value));
     }
 
-    LuaEntity* LuaEntityFactory::makeLuaEntity(const lua_CFunction value)
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const std::string& name, const lua_CFunction value)
     {
-        return new LuaFunction(value);
+        return new LuaFunction(name, value);
     }
 
     // ...................................................................... //

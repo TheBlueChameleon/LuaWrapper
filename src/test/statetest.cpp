@@ -79,7 +79,7 @@ TEST(StateTest, ExtractGlobalsTest)
     ASSERT_TRUE(state.hasGlobalSymbol("func"));
     EXPECT_EQ(state.getGlobalSymbolType("func"), LuaTypeId::Function);
     LuaEntity* function = state.getGlobalEntity("func");
-    lua_CFunction luaFuncPtr = function->asLuaFunction().getValue();
+    lua_CFunction luaFuncPtr = function->asLuaFunction().getPseudoFuncPtr();
     EXPECT_NE(luaFuncPtr, nullptr);
     delete function;
 
@@ -92,7 +92,7 @@ TEST(StateTest, ExtractGlobalsTest)
         tableEntry = more.find(LuaString("foo"));
         ASSERT_NE(tableEntry, nullptr);
         ASSERT_EQ(tableEntry->getTypeId(), LuaTypeId::Function);
-        EXPECT_EQ(tableEntry->asLuaFunction().getValue(), luaFuncPtr);
+        EXPECT_EQ(tableEntry->asLuaFunction().getPseudoFuncPtr(), luaFuncPtr);
     }
 
     LuaNil nil;

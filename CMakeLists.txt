@@ -88,6 +88,7 @@ add_executable(LuaWrapper-Test
     src/test/typesystemtest.cpp
     src/test/statetest.cpp
     src/test/tabletest.cpp
+    src/test/echotest.cpp
 )
 
 target_link_libraries(LuaWrapper-Test

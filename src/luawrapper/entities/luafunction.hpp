@@ -1,6 +1,8 @@
 #ifndef LUAFUNCTION_HPP
 #define LUAFUNCTION_HPP
 
+#include <string>
+
 #include "luaentity.hpp"
 
 namespace LuaWrapper
@@ -10,11 +12,12 @@ namespace LuaWrapper
     class LuaFunction : public LuaEntity
     {
         private:
-            lua_CFunction value;
+            std::string     name;
+            lua_CFunction   pseudoFuncPtr;
 
         public:
             LuaFunction();
-            LuaFunction(const lua_CFunction value);
+            LuaFunction(const std::string& name, const lua_CFunction value);
 
             LuaFunction(const LuaFunction& other) = default;
             LuaFunction(LuaFunction&& other) = default;
@@ -25,8 +28,8 @@ namespace LuaWrapper
 
             bool isFunction() const;
 
-            lua_CFunction getValue() const;
-            void setValue(lua_CFunction newValue);
+            const std::string& getName() const;
+            lua_CFunction getPseudoFuncPtr() const;
 
             ParameterStack invoke(lua_State* const L, const ParameterStack& args);
 

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 using namespace std::string_literals;
 
@@ -34,6 +35,23 @@ namespace LuaWrapper
         for (const auto* param: entities)
         {
             param->pushToLua(L);
+        }
+    }
+
+    void ParameterStack::popFromLua(lua_State* L, int nArgs)
+    {
+        nArgs = ((nArgs == -1) ? lua_gettop(L) : nArgs);
+        while (lua_gettop(L))
+        {
+            if (nArgs == 0)
+            {
+                break;
+            }
+
+            entities.push_back(LuaEntityFactory::makeLuaEntityFromTypeId(lua_type(L, -1)));
+            entities.back()->popFromLua(L);
+
+            --nArgs;
         }
     }
 
