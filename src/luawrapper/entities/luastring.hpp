@@ -9,9 +9,6 @@ namespace LuaWrapper
 {
     class LuaString : public LuaEntity
     {
-        private:
-            std::string value;
-
         public:
             LuaString();
             LuaString(const char* value);
@@ -21,7 +18,7 @@ namespace LuaWrapper
             LuaString(const LuaString& other) = default;
             LuaString(LuaString&& other);
             LuaString& operator=(const LuaString& other) = default;
-            LuaString& operator=(LuaString&& other);
+            LuaString& operator=(LuaString&& other) = default;
 
             static LuaTypeId getStaticTypeId();
 

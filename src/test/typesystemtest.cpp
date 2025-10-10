@@ -81,21 +81,21 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
 {
     // setup
     const int NAddedItems = 14;
-    const void* ptrLUD = getVoidPtr();
+    void* ptrLUD = getVoidPtr();
 
     LuaNil              nil;
     LuaBoolean          lBoolean;
-    LuaTrivialType      tBoolean = true;
+    LuaWrappableType    tBoolean = true;
     LuaLightUserData    lLUD = ptrLUD;
-    LuaTrivialType      tLUD = ptrLUD;
+    LuaWrappableType    tLUD = ptrLUD;
     LuaNumber           lNumber = -1;
-    LuaTrivialType      tNumberI = -1;
-    LuaTrivialType      tNumberD = -1.0;
+    LuaWrappableType    tNumberI = -1;
+    LuaWrappableType    tNumberD = -1.0;
     LuaString           lcString = "LuaString for copy";
     LuaString           lmString = "LuaString for move";
-    LuaTrivialType      tlString = "literal string for copy";
-    LuaTrivialType      tscString = "std::string for copy"s;
-    LuaTrivialType      tsmString = "std::string for move"s;
+    LuaWrappableType    tlString = "literal string for copy";
+    LuaWrappableType    tscString = "std::string for copy"s;
+    LuaWrappableType    tsmString = "std::string for move"s;
 
     const auto preMove = lmString.c_str();
 
@@ -111,8 +111,12 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
     /*  6 */ .addEntity(lNumber)
     /*  7 */ .addEntity(tNumberD)
     /*  8 */ .addEntity(tNumberI)
-    /*  9 */ .addEntity(lcString)
-    /* 10 */ .addEntity(std::move(lmString))
+    /*  9 */ .addEntity(lcString);
+    std::cout << "### MARKER" << std::endl;
+    ps
+    /* 10 */ .addEntity(std::move(lmString));
+    std::cout << "### DONE" << std::endl;
+    ps
     /* 11 */ .addEntity(tlString)
     /* 12 */ .addEntity(tscString)
     /* 13 */ .addEntity(std::move(tsmString))
@@ -122,6 +126,8 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
     const auto newInst = ps.at(10)->asLuaString().c_str();
 
     // then
+    std::cout << lmString.to_string() << std::endl;
+    std::cout << ps.at(10)->to_string() << std::endl;
     EXPECT_EQ(preMove, newInst);
 
     ASSERT_FALSE(ps.empty());

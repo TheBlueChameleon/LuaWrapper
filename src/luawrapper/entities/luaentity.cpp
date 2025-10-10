@@ -10,7 +10,13 @@ using namespace std::string_literals;
 namespace LuaWrapper
 {
     LuaEntity::LuaEntity(const LuaTypeId typeID) :
-        typeId(typeID)
+        typeId(typeID),
+        value(nullptr)
+    {}
+
+    LuaEntity::LuaEntity(const LuaTypeId typeId, const LuaWrappableType value) :
+        typeId(typeId),
+        value(value)
     {}
 
     LuaEntity::~LuaEntity()

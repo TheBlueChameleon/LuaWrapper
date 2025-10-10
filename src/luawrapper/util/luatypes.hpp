@@ -43,11 +43,11 @@ namespace LuaWrapper
     // ====================================================================== //
 
     // TODO: add lua_CFunction?
-    using LuaTrivialVariant = std::variant<nullptr_t, bool, const void*, int, double, char*, std::string>;
-    class LuaTrivialType : public LuaTrivialVariant
+    using LuaVariant = std::variant<nullptr_t, bool, void*, int, double, char*, std::string>;
+    class LuaWrappableType : public LuaVariant
     {
         public:
-            using LuaTrivialVariant::variant;
+            using LuaVariant::variant;
 
             static constexpr auto Nil = 0;
             static constexpr auto Boolean = 1;
@@ -61,7 +61,7 @@ namespace LuaWrapper
 
             nullptr_t           getAsNil() const;
             bool                getAsBoolean() const;
-            const void*         getAsLightUserData() const;
+            void*               getAsLightUserData() const;
             int                 getAsInteger() const;
             double              getAsDouble() const;
             const char*         getAsCharPtr() const;

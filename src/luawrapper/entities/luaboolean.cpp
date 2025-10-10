@@ -7,8 +7,7 @@ namespace LuaWrapper
     {}
 
     LuaBoolean::LuaBoolean(bool value) :
-        LuaEntity(LuaTypeId::Boolean),
-        value(value)
+        LuaEntity(LuaTypeId::Boolean, value)
     {}
 
     LuaTypeId LuaBoolean::getStaticTypeId()
@@ -23,7 +22,7 @@ namespace LuaWrapper
 
     bool LuaBoolean::getValue() const
     {
-        return value;
+        return value.getAsBoolean();
     }
 
     void LuaBoolean::setValue(const bool newValue)
@@ -38,17 +37,17 @@ namespace LuaWrapper
 
     void LuaBoolean::pushToLua(lua_State* L) const
     {
-        lua_pushboolean(L, value);
+        lua_pushboolean(L, value.getAsBoolean());
     }
 
     void LuaBoolean::fetchFromLua(lua_State* L)
     {
-        value = lua_toboolean(L, -1);
+        value = static_cast<bool>(lua_toboolean(L, -1));
     }
 
     std::string LuaBoolean::to_string() const
     {
-        return (value ? "true" : "false");
+        return (value.getAsBoolean() ? "true" : "false");
     }
 }
 

@@ -19,7 +19,7 @@ namespace LuaWrapper
 
             static LuaEntity* makeLuaEntity(const nullptr_t value = nullptr);
             static LuaEntity* makeLuaEntity(const bool value);
-            static LuaEntity* makeLuaEntity(const void* value);
+            static LuaEntity* makeLuaEntity(void* const value);
             static LuaEntity* makeLuaEntity(const int value);
             static LuaEntity* makeLuaEntity(const double value);
             static LuaEntity* makeLuaEntity(const char* const value);
@@ -27,8 +27,8 @@ namespace LuaWrapper
             static LuaEntity* makeLuaEntity(std::string&& value);
             static LuaEntity* makeLuaEntity(const std::string& name, const lua_CFunction value);
 
-            static LuaEntity* makeLuaEntity(const LuaTrivialType& value);
-            static LuaEntity* makeLuaEntity(LuaTrivialType&& value);
+            static LuaEntity* makeLuaEntity(const LuaWrappableType& value);
+            static LuaEntity* makeLuaEntity(LuaWrappableType&& value);
 
             static LuaEntity* makeLuaEntity(const LuaNil& value);
             static LuaEntity* makeLuaEntity(LuaNil&& value);

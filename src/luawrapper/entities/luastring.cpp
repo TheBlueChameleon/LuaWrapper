@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "luastring.hpp"
 
 namespace LuaWrapper
@@ -6,29 +8,24 @@ namespace LuaWrapper
         LuaString("")
     {}
 
+    LuaString::LuaString(LuaString&& other) :
+        LuaString(std::move(other.value.getAsString()))
+    {
+        std::cout << "move LuaString" << std::endl;
+    }
+
     LuaString::LuaString(const char* value) :
-        LuaEntity(LuaTypeId::String),
-        value(value)
+        LuaEntity(LuaTypeId::String, value)
     {}
 
     LuaString::LuaString(const std::string& value) :
-        LuaEntity(LuaTypeId::String),
-        value(value)
+        LuaEntity(LuaTypeId::String, value)
     {}
 
     LuaString::LuaString(std::string&& value) :
-        LuaEntity(LuaTypeId::String),
-        value(std::move(value))
-    {}
-
-    LuaString::LuaString(LuaString&& other) :
-        LuaString(std::move(other.value))
-    {}
-
-    LuaString& LuaString::operator=(LuaString&& other)
+        LuaEntity(LuaTypeId::String, std::move(value))
     {
-        this->value = std::move(other.value);
-        return *this;
+        std::cout << "move StdString" << std::endl;
     }
 
     LuaTypeId LuaString::getStaticTypeId()
@@ -43,7 +40,7 @@ namespace LuaWrapper
 
     const std::string& LuaString::getValue() const
     {
-        return value;
+        return value.getAsString();
     }
 
     void LuaString::setValue(const std::string& newValue)
@@ -58,7 +55,7 @@ namespace LuaWrapper
 
     const char* LuaString::c_str() const
     {
-        return value.c_str();
+        return value.getAsString().c_str();
     }
 
     bool LuaString::operator==(const LuaString& other) const
@@ -68,7 +65,7 @@ namespace LuaWrapper
 
     void LuaString::pushToLua(lua_State* L) const
     {
-        lua_pushstring(L, value.c_str());
+        lua_pushstring(L, value.getAsString().c_str());
     }
 
     void LuaString::fetchFromLua(lua_State* L)
@@ -78,7 +75,7 @@ namespace LuaWrapper
 
     std::string LuaString::to_string() const
     {
-        return value;
+        return value.getAsString();
     }
 }
 

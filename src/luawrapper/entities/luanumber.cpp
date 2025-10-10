@@ -7,8 +7,7 @@ namespace LuaWrapper
     {}
 
     LuaNumber::LuaNumber(const double value) :
-        LuaEntity(LuaTypeId::Number),
-        value(value)
+        LuaEntity(LuaTypeId::Number, value)
     {}
 
     LuaTypeId LuaNumber::getStaticTypeId()
@@ -23,7 +22,14 @@ namespace LuaWrapper
 
     double LuaNumber::getValue() const
     {
-        return value;
+        if (value.index() == LuaWrappableType::Integer)
+        {
+            return static_cast<double>(value.getAsInteger());
+        }
+        else
+        {
+            return value.getAsDouble();
+        }
     }
 
     void LuaNumber::setValue(double newValue)
@@ -38,7 +44,14 @@ namespace LuaWrapper
 
     void LuaNumber::pushToLua(lua_State* L) const
     {
-        lua_pushnumber(L, value);
+        if (value.index() == LuaWrappableType::Integer)
+        {
+            lua_pushinteger(L, value.getAsInteger());
+        }
+        else
+        {
+            lua_pushnumber(L, value.getAsDouble());
+        }
     }
 
     void LuaNumber::fetchFromLua(lua_State* L)
@@ -48,7 +61,14 @@ namespace LuaWrapper
 
     std::string LuaNumber::to_string() const
     {
-        return std::to_string(value);
+        if (value.index() == LuaWrappableType::Integer)
+        {
+            return std::to_string(value.getAsInteger());
+        }
+        else
+        {
+            return std::to_string(value.getAsDouble());
+        }
     }
 }
 

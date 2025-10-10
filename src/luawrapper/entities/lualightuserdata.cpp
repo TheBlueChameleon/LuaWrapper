@@ -8,9 +8,8 @@ namespace LuaWrapper
         LuaLightUserData(nullptr)
     {}
 
-    LuaLightUserData::LuaLightUserData(const void* value) :
-        LuaEntity(LuaTypeId::LightUserData),
-        value(value)
+    LuaLightUserData::LuaLightUserData(void* value) :
+        LuaEntity(LuaTypeId::LightUserData, value)
     {}
 
     LuaTypeId LuaLightUserData::getStaticTypeId()
@@ -25,10 +24,10 @@ namespace LuaWrapper
 
     const void* LuaLightUserData::getValue() const
     {
-        return value;
+        return value.getAsLightUserData();
     }
 
-    void LuaLightUserData::setValue(const void* newValue)
+    void LuaLightUserData::setValue(void* const newValue)
     {
         value = newValue;
     }
@@ -40,17 +39,17 @@ namespace LuaWrapper
 
     void LuaLightUserData::pushToLua(lua_State* L) const
     {
-        lua_pushlightuserdata(L, const_cast<void*>(value));
+        lua_pushlightuserdata(L, value.getAsLightUserData());
     }
 
     void LuaLightUserData::fetchFromLua(lua_State* L)
     {
-        value = lua_topointer(L, -1);
+        value = const_cast<void*>(lua_topointer(L, -1));
     }
 
     std::string LuaLightUserData::to_string() const
     {
-        return std::format("LightUserData @ {}", value);
+        return std::format("LightUserData @ {}", value.getAsLightUserData());
     }
 }
 

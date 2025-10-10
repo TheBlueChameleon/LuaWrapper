@@ -7,9 +7,6 @@ namespace LuaWrapper
 {
     class LuaNumber : public LuaEntity
     {
-        private:
-            double value;
-
         public:
             LuaNumber();
             LuaNumber(const double value);

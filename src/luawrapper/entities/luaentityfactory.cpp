@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 using namespace std::string_literals;
 
@@ -59,7 +60,7 @@ namespace LuaWrapper
         return new LuaBoolean(value);
     }
 
-    LuaEntity* LuaEntityFactory::makeLuaEntity(const void* value)
+    LuaEntity* LuaEntityFactory::makeLuaEntity(void* const value)
     {
         return new LuaLightUserData(value);
     }
@@ -97,23 +98,23 @@ namespace LuaWrapper
     // ...................................................................... //
     // from variant
 
-    LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaTrivialType& value)
+    LuaEntity* LuaEntityFactory::makeLuaEntity(const LuaWrappableType& value)
     {
         switch (value.index())
         {
-            case LuaTrivialType::Nil:
+            case LuaWrappableType::Nil:
                 return LuaEntityFactory::makeLuaEntity();
-            case LuaTrivialType::Boolean:
+            case LuaWrappableType::Boolean:
                 return LuaEntityFactory::makeLuaEntity(value.getAsBoolean());
-            case LuaTrivialType::LightUserData:
+            case LuaWrappableType::LightUserData:
                 return LuaEntityFactory::makeLuaEntity(value.getAsLightUserData());
-            case LuaTrivialType::Integer:
+            case LuaWrappableType::Integer:
                 return LuaEntityFactory::makeLuaEntity(value.getAsInteger());
-            case LuaTrivialType::Double:
+            case LuaWrappableType::Double:
                 return LuaEntityFactory::makeLuaEntity(value.getAsDouble());
-            case LuaTrivialType::CharPtr:
+            case LuaWrappableType::CharPtr:
                 return LuaEntityFactory::makeLuaEntity(value.getAsCharPtr());
-            case LuaTrivialType::String:
+            case LuaWrappableType::String:
                 return LuaEntityFactory::makeLuaEntity(value.getAsString());
 
             default:
@@ -123,23 +124,23 @@ namespace LuaWrapper
         }
     }
 
-    LuaEntity* LuaEntityFactory::makeLuaEntity(LuaTrivialType&& value)
+    LuaEntity* LuaEntityFactory::makeLuaEntity(LuaWrappableType&& value)
     {
         switch (value.index())
         {
-            case LuaTrivialType::Nil:
+            case LuaWrappableType::Nil:
                 return LuaEntityFactory::makeLuaEntity();
-            case LuaTrivialType::Boolean:
+            case LuaWrappableType::Boolean:
                 return LuaEntityFactory::makeLuaEntity(value.getAsBoolean());
-            case LuaTrivialType::LightUserData:
+            case LuaWrappableType::LightUserData:
                 return LuaEntityFactory::makeLuaEntity(value.getAsLightUserData());
-            case LuaTrivialType::Integer:
+            case LuaWrappableType::Integer:
                 return LuaEntityFactory::makeLuaEntity(value.getAsInteger());
-            case LuaTrivialType::Double:
+            case LuaWrappableType::Double:
                 return LuaEntityFactory::makeLuaEntity(value.getAsDouble());
-            case LuaTrivialType::CharPtr:
+            case LuaWrappableType::CharPtr:
                 return LuaEntityFactory::makeLuaEntity(value.getAsCharPtr());
-            case LuaTrivialType::String:
+            case LuaWrappableType::String:
                 return LuaEntityFactory::makeLuaEntity(std::move(value.getAsString()));
 
             default:
@@ -199,6 +200,7 @@ namespace LuaWrapper
 
     LuaEntity* LuaEntityFactory::makeLuaEntity(LuaString&& value)
     {
+        std::cout << "factory move LuaString" << std::endl;
         return new LuaString(std::move(value));
     }
 
@@ -260,6 +262,7 @@ namespace LuaWrapper
 
     LuaEntity* LuaEntityFactory::makeLuaEntity(LuaEntity&& value)
     {
+        std::cout << "move into factory distributor" << std::endl;
         switch (value.getTypeId())
         {
             case LuaTypeId::None:

@@ -7,12 +7,9 @@ namespace LuaWrapper
 {
     class LuaLightUserData : public LuaEntity
     {
-        private:
-            const void* value;
-
         public:
             LuaLightUserData();
-            LuaLightUserData(const void* value);
+            LuaLightUserData(void* value);
 
             LuaLightUserData(const LuaLightUserData& other) = default;
             LuaLightUserData(LuaLightUserData&& other) = default;
@@ -24,7 +21,7 @@ namespace LuaWrapper
             bool isLightUserData() const;
 
             const void* getValue() const;
-            void        setValue(const void* newValue);
+            void        setValue(void* const newValue);
 
             bool operator==(const LuaLightUserData& other) const;
 

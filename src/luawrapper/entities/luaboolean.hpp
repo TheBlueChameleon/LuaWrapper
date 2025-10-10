@@ -7,9 +7,6 @@ namespace LuaWrapper
 {
     class LuaBoolean : public LuaEntity
     {
-        private:
-            bool value;
-
         public:
             LuaBoolean();
             LuaBoolean(bool value);
