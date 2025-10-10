@@ -76,23 +76,23 @@ namespace LuaWrapper
 
     // ====================================================================== //
 
-    std::string LuaTrivialType::getTrivialTypeName() const
+    std::string LuaWrappableType::getTrivialTypeName() const
     {
         switch (index())
         {
-            case LuaTrivialType::Nil:
+            case LuaWrappableType::Nil:
                 return "null pointer";
-            case LuaTrivialType::Boolean:
+            case LuaWrappableType::Boolean:
                 return "boolean";
-            case LuaTrivialType::LightUserData:
+            case LuaWrappableType::LightUserData:
                 return "void pointer";
-            case LuaTrivialType::Integer:
+            case LuaWrappableType::Integer:
                 return "integer";
-            case LuaTrivialType::Double:
+            case LuaWrappableType::Double:
                 return "double";
-            case LuaTrivialType::CharPtr:
+            case LuaWrappableType::CharPtr:
                 return "char pointer";
-            case LuaTrivialType::String:
+            case LuaWrappableType::String:
                 return "string";
 
             default:
@@ -102,7 +102,7 @@ namespace LuaWrapper
         }
     }
 
-    void assertType(const LuaTrivialType* value, const int expectedTypeId)
+    void assertType(const LuaWrappableType* value, const int expectedTypeId)
     {
         if (value->index() != expectedTypeId)
         {
@@ -113,46 +113,46 @@ namespace LuaWrapper
         }
     }
 
-    nullptr_t LuaTrivialType::getAsNil() const
+    nullptr_t LuaWrappableType::getAsNil() const
     {
-        assertType(this, LuaTrivialType::Nil);
+        assertType(this, LuaWrappableType::Nil);
         return nullptr;
     }
 
-    bool LuaTrivialType::getAsBoolean() const
+    bool LuaWrappableType::getAsBoolean() const
     {
-        assertType(this, LuaTrivialType::Boolean);
-        return std::get<LuaTrivialType::Boolean>(*this);
+        assertType(this, LuaWrappableType::Boolean);
+        return std::get<LuaWrappableType::Boolean>(*this);
     }
 
-    const void* LuaTrivialType::getAsLightUserData() const
+    const void* LuaWrappableType::getAsLightUserData() const
     {
-        assertType(this, LuaTrivialType::LightUserData);
-        return std::get<LuaTrivialType::LightUserData>(*this);
+        assertType(this, LuaWrappableType::LightUserData);
+        return std::get<LuaWrappableType::LightUserData>(*this);
     }
 
-    int LuaTrivialType::getAsInteger() const
+    int LuaWrappableType::getAsInteger() const
     {
-        assertType(this, LuaTrivialType::Integer);
-        return std::get<LuaTrivialType::Integer>(*this);
+        assertType(this, LuaWrappableType::Integer);
+        return std::get<LuaWrappableType::Integer>(*this);
     }
 
-    double LuaTrivialType::getAsDouble() const
+    double LuaWrappableType::getAsDouble() const
     {
-        assertType(this, LuaTrivialType::Double);
-        return std::get<LuaTrivialType::Double>(*this);
+        assertType(this, LuaWrappableType::Double);
+        return std::get<LuaWrappableType::Double>(*this);
     }
 
-    const char* LuaTrivialType::getAsCharPtr() const
+    const char* LuaWrappableType::getAsCharPtr() const
     {
-        assertType(this, LuaTrivialType::CharPtr);
-        return std::get<LuaTrivialType::CharPtr>(*this);
+        assertType(this, LuaWrappableType::CharPtr);
+        return std::get<LuaWrappableType::CharPtr>(*this);
     }
 
-    const std::string& LuaTrivialType::getAsString() const
+    const std::string& LuaWrappableType::getAsString() const
     {
-        assertType(this, LuaTrivialType::String);
-        return std::get<LuaTrivialType::String>(*this);
+        assertType(this, LuaWrappableType::String);
+        return std::get<LuaWrappableType::String>(*this);
     }
 }
 

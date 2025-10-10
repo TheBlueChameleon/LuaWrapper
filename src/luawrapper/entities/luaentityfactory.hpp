@@ -27,8 +27,8 @@ namespace LuaWrapper
             static LuaEntity* makeLuaEntity(std::string&& value);
             static LuaEntity* makeLuaEntity(const std::string& name, const lua_CFunction value);
 
-            static LuaEntity* makeLuaEntity(const LuaTrivialType& value);
-            static LuaEntity* makeLuaEntity(LuaTrivialType&& value);
+            static LuaEntity* makeLuaEntity(const LuaWrappableType& value);
+            static LuaEntity* makeLuaEntity(LuaWrappableType&& value);
 
             static LuaEntity* makeLuaEntity(const LuaNil& value);
             static LuaEntity* makeLuaEntity(LuaNil&& value);

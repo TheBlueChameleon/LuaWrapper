@@ -85,17 +85,17 @@ TEST(TypeSystemTest, ParameterStack_BuilderInterface)
 
     LuaNil              nil;
     LuaBoolean          lBoolean;
-    LuaTrivialType      tBoolean = true;
+    LuaWrappableType      tBoolean = true;
     LuaLightUserData    lLUD = ptrLUD;
-    LuaTrivialType      tLUD = ptrLUD;
+    LuaWrappableType      tLUD = ptrLUD;
     LuaNumber           lNumber = -1;
-    LuaTrivialType      tNumberI = -1;
-    LuaTrivialType      tNumberD = -1.0;
+    LuaWrappableType      tNumberI = -1;
+    LuaWrappableType      tNumberD = -1.0;
     LuaString           lcString = "LuaString for copy";
     LuaString           lmString = "LuaString for move";
-    LuaTrivialType      tlString = "literal string for copy";
-    LuaTrivialType      tscString = "std::string for copy"s;
-    LuaTrivialType      tsmString = "std::string for move"s;
+    LuaWrappableType      tlString = "literal string for copy";
+    LuaWrappableType      tscString = "std::string for copy"s;
+    LuaWrappableType      tsmString = "std::string for move"s;
 
     const auto preMove = lmString.c_str();
 

@@ -11,10 +11,10 @@ namespace LuaWrapper
     ParameterStack::ParameterStack()
     {}
 
-    ParameterStack::ParameterStack(const LuaTrivialType& item)
+    ParameterStack::ParameterStack(const LuaWrappableType& item)
     {}
 
-    ParameterStack::ParameterStack(const std::initializer_list<LuaTrivialType>& items)
+    ParameterStack::ParameterStack(const std::initializer_list<LuaWrappableType>& items)
     {
         for (const auto& item : items)
         {
@@ -67,13 +67,13 @@ namespace LuaWrapper
         return *this;
     }
 
-    ParameterStack& ParameterStack::addEntity(const LuaTrivialType& trivialEntity)
+    ParameterStack& ParameterStack::addEntity(const LuaWrappableType& trivialEntity)
     {
         entities.push_back(LuaEntityFactory::makeLuaEntity(trivialEntity));
         return *this;
     }
 
-    ParameterStack& ParameterStack::addEntity(LuaTrivialType&& trivialEntity)
+    ParameterStack& ParameterStack::addEntity(LuaWrappableType&& trivialEntity)
     {
         entities.push_back(LuaEntityFactory::makeLuaEntity(std::move(trivialEntity)));
         return *this;

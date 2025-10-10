@@ -5,7 +5,7 @@ namespace LuaWrapper
 {
     class LuaTypeId;
     class LuaEntity;
-    class LuaTrivialType;
+    class LuaWrappableType;
 
     class LuaNil;
     class LuaBoolean;
