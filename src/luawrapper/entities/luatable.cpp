@@ -198,14 +198,32 @@ namespace LuaWrapper
 
     void LuaTable::update(const LuaEntity& key, const LuaEntity& value)
     {
-        copyEntity(table, key, value);
         assertValidKey(key);
+        auto [keyPtr, valuePtr] = findInternal(key, table);
+        if (valuePtr)
+        {
+            delete valuePtr;
+            table[keyPtr] = LuaEntityFactory::makeLuaEntity(value);
+        }
+        else
+        {
+            copyEntity(table, key, value);
+        }
     }
 
     void LuaTable::update(LuaEntity&& key, LuaEntity&& value)
     {
-        moveEntity(table, key, value);
         assertValidKey(key);
+        auto [keyPtr, valuePtr] = findInternal(key, table);
+        if (valuePtr)
+        {
+            delete valuePtr;
+            table[keyPtr] = LuaEntityFactory::makeLuaEntity(std::move(value));
+        }
+        else
+        {
+            moveEntity(table, key, value);
+        }
     }
 
     void LuaTable::clear()
