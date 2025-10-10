@@ -88,6 +88,7 @@ add_executable(LuaWrapper-Test
     src/test/main.cpp
     src/test/commonconversionutil.hpp               src/test/commonconversionutil.cpp
     src/test/typesystemtest.cpp
+    src/test/parameterstacktest.cpp
     src/test/statetest.cpp
     src/test/tabletest.cpp
     src/test/echotest.cpp
