@@ -13,12 +13,13 @@ namespace LuaWrapper
 {
     void assertValidKey(const LuaEntity& key)
     {
-        if (!LuaTable::getAllowedKeyTypes().contains(key.getTypeId()))
+        if (LuaTable::getAllowedKeyTypes().contains(key.getTypeId()))
         {
-            throw LuaInvalidArgumentError(
-                "A key of type "s + key.getTypeId().getTypeName() + " may not be used."
-            );
+            return;
         }
+        throw LuaInvalidArgumentError(
+            "A key of type "s + key.getTypeId().getTypeName() + " may not be used."
+        );
     }
 
     void copyEntity(LuaTable::EntityMap& table, const LuaEntity& key, const LuaEntity& value)
@@ -63,8 +64,16 @@ namespace LuaWrapper
         }
     }
 
+    LuaTable& LuaTable::operator=(const LuaTable& other)
+    {
+        clear();
+        *this = LuaTable(other);
+        return *this;
+    }
+
     LuaTable& LuaTable::operator=(LuaTable&& other)
     {
+        clear();
         table = std::move(other.table);
         return *this;
     }
@@ -238,15 +247,15 @@ namespace LuaWrapper
 
     bool LuaTable::erase(const LuaEntity& key)
     {
-        std::pair<LuaEntity*, LuaEntity*> target = findInternal(key, table);
-        if (target.first == nullptr)
+        const auto [keyPtr, valPtr] = findInternal(key, table);
+        if (keyPtr == nullptr)
         {
             return false;
         }
 
-        delete (target.first);
-        delete (target.second);
-        table.erase(target.first);
+        delete (keyPtr);
+        delete (valPtr);
+        table.erase(keyPtr);
 
         return true;
     }
@@ -289,6 +298,8 @@ namespace LuaWrapper
 
     void LuaTable::fetchFromLua(lua_State* L)
     {
+        clear();
+
         LuaTypeId tid;
         LuaEntity* key;
         LuaEntity* value;

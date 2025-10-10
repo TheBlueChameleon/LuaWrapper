@@ -35,7 +35,7 @@ namespace LuaWrapper
 
             LuaTable(const LuaTable& other);
             LuaTable(LuaTable&& other);
-            LuaTable& operator=(const LuaTable& other) = default;
+            LuaTable& operator=(const LuaTable& other);
             LuaTable& operator=(LuaTable&& other);
 
             ~LuaTable();
